@@ -1,0 +1,16 @@
+# -*- mode: org -*-
+#+SETUPFILE: ~/.vault/cfgs/org-central/org-setupfile
+#+TITLE: Introduction to GeMa Paradigm
+
+* synopsis
+ - GeMa is a paradigm, a workflow and a toolset for modeling, reasoning, and communicating about computer technology topics.
+* advisement
+ - The name GeMa is short for Genesis Matrix, the configuration/policy portion that controlled the action/effect of the Genesis device.
+ - The project was named Genesis Matrix for quite some time before the Terraform project was named/announced, but the notional coherence in the names is appreciated.
+ - This project started with the goal of using Salt to create managed and reproducible systems.
+ - Initially this meant individual computers but over time was extended significantly beyond that.
+ - GeMa Paradigm is an organizing/coordinating discipline, built around operationalizing Saltstack.
+ - There is no shortage of examples of impressive solutions implemented using Salt since it's flexible enough to be useful for nearly anything but in reviewing these examples I started to ask, how practically feasible would it be to mix and match the parts I like among all these outstanding example in a managed and idiomatic way.
+ - A design workstation led to the desire for strong conventions to speed deliveries.
+ - An attempt is made to communicate Principles, Policies, and Practices.
+ - GeMa remains proudly proto-matter free.

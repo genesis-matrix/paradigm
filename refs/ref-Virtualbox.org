@@ -1,0 +1,7 @@
+# -*- mode: org -*-
+#+SETUPFILE: ~/.vault/cfgs/org-central/org-setupfile
+#+TITLE: notes on GeMa // Virtualbox
+* synopsis
+* advisement
+* subroutines
+

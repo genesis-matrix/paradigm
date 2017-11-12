@@ -1,0 +1,229 @@
+# -*- mode: org -*-
+#+SETUPFILE: ~/.vault/cfgs/org-central/org-setupfile
+#+TITLE: notes on GeMa // Lexicon aka Defined-Terms
+
+ - graph :: aka <<<salt-graph>>> or <<<node-graph>>>. the collection of machines in an environment that are capable and presently enabled for coordinated control via Salt.
+   - in the most typical case, this is a list of machines with the salt-minion installed that are connected to the salt-master
+   - the intended reference is to https://en.wikipedia.org/wiki/Graph_theory , to be disambiguated from https://en.wikipedia.org/wiki/Chart
+   - defined in contrast to: horde
+ - <<horde>> :: the collection of machines in an environment that are _not_ presently enabled for coordinated control via Salt.
+   - in a typical case, the horde are the machines that are not joined to the graph, encompassing a variety of reasons:
+     - not yet evaluated for inclusion into the graph
+     - lacking a feasable capability to join the graph
+     - are unknown unknowns aka "rogue", or otherwise unaccounted
+ - attributes :: aka, <<targeting-attributes>>. The collected information about graph members that is considered for evaluation during a specific targetting clause
+   - attributes are a generalization, (a/ an attempt at simplifying communication), around the varied means of targetting
+   - attributes are also an attempt to excersize discipline, (in the interest of comprehensibility, maintainability a/ ultimately sustainability)
+   - attributes are also an attempt at minimizing unnecessary changes w/i top files, preventing risk and isolating highly-mutable configs
+   - among the (potentially highly-dynamic) set of data items, (grains, pillars, etc), available to a particular minion, only some will be regarded as attributes.
+   - Q: should attributes map to node groups, perhaps only 'read-only' attributes
+ - labels :: configuration is managed by pillar-based "labels". 
+   - Labels can include other labels, new and existing, but this all starts with the "entrypoint" labels.
+   - This label-based configuration is initiated by "entrypoint" aka "primary" or "intrinsic" labels.
+ - lookups :: fill pillar data for downstream use based on encountered labels
+ - <<baseline vm>> :: a type of VM image, typically intended to be minimalistic while reflecting established best practices
+   - a "baseline vm" is a vm build type, alongside and in contrast to the [[turnkey vm]] type
+ - <<turnkey vm>> :: a VM 
+   - a "turnkey vm" is a vm build type, alongside and in contrast to the [[baseline vm]] type
+ - Genesis Matrix :: aka <<<GeMa>>>
+   - a collection of actionable notions interested in sanely organizing the DNA of a system, (or sets of systems), at arbitrary phases of design, implementation, and test/validation.
+   - the principle tools are: Vagrant, Salt, Git, Packer
+   - the principle concepts are: the runnable repo, infrastructure as code, TDD, repeatable research
+ - GeMa Controller :: aka <<<gema-ctl>>>
+   - a practical point of entry and control for the GeMa concept and tooling
+ - scenario(s) :: a collection of system(s) state and the discrete means to repeatably share and reproduce it
+   - aka <<<gema-scenario>>>
+   - at present, ([2016-08-20 Sat]), scene details are implemented first by describing/arranging machines and their attributes in a purpose-oriented salt roster file
+   - a scene may include the capability, (often using tools and information from GeMa), to transition into a different scene
+   - in this way scenes may be linked, (intentionally or otherwise) into a state change graph
+   - GeMa and gema-ctl are intended as tools for designing, implementing, testing, managing and presenting scenes
+ - SLS Organization ::
+   - sls path by segment: <sls_type>.<resource_type>.<resource_ontology>
+ - state :: the notion of a systems' configuration state
+   - ideally, state will be procedurally achievable through use of GeMa
+   - are generally rendered via their =provision_target= and hypervisor,
+     - for GeMa this is most typically, (though not exclusively) the respective pairing of Vagrant and VMware Fusion
+ - managed state transformation :: aka transform. A controlled transition from one known state to another known state
+   - in practice, (and in particular), this usually means a transition from one state spec to another spec of the same state
+ - state implementation :: the templatized state written to be used with a feature/state specification
+ - state specification :: aka feature specification, state spec. The specific combination of variable data fed into a variablized and templatized state.
+   - server specs are grouped according to the class of resources they operate on, for example there are server cfgspecs, api cfgspec, etc
+   - a state specification will fail-safely when invoked in a non-applicable circumstance
+   - will generally correspond to one SLS and the pillar data fed to it.
+   - will use sane defaults for it's template variables if more specific variables are not provided
+   - a cfgspec will track the way a state/cfg is used a/o manifested
+ - a specification :: aka spec
+   - this refers to the exact variable-fulfilled, fully realized feature as delivered to a target resource
+   - the specification range is the domain of possible specifications
+ - an implementation ::
+   - the way that a feature is implemented
+ - feature :: 
+   - the smallest unit of advertisable functionality, selectable as a GeMa label
+   - may be implemented as a: state, pillar label, signal handler (reactor), signal emitter (beacon), orchestration, or any combination of these.
+   - features may use resource-specific aliases for descriptive convenience
+     | resource_type | feature_alias | implementation | specification |
+     |---------------+---------------+----------------+---------------|
+     | machine       | config        |                |               |
+     |               |               |                |               |
+ - feature-pack :: 
+   - a collection of purpose-organized features
+   - feature-pack may use resource-specific aliases for descriptive convenience
+     | resource_type | feature_pack_alias | implementation | specification |
+     |---------------+--------------------+----------------+---------------|
+     | machine       | role               |                |               |
+     |               |                    |                |               |
+ - GeMa Roles ::
+   - overview
+     #+BEGIN_SRC plantuml :file ./media/viz-gema-role-relationships.png
+       digraph g {
+         customer -> pm [label="request"]
+         pm -> designer [label="business requirements"]
+         designer -> pm [label="catalog"]
+         designer -> implementer [label="commission states"]
+         implementer -> designer [label="authors states"]
+       }
+     #+END_SRC
+
+     #+RESULTS:
+     [[file:./media/viz-gema-role-relationships.png]]
+   - PM
+     - maintains a library of customer interests/desires and organizes requests according to: resource type, customer, prokect, etc
+     - maintains a fully history of the evolution of business requests
+   - designer
+     - maintains a list of available features and feature-packs and their available range of specs
+     - maintains a list of resources, their respectice features, and their operating state
+     - maintains prose descriptions, validation a/o unit tests for features and other policy as needed
+     - commissions and authors policy
+     - solution design via feature composition and implementation
+     - implementation details: state signatures, pillar variable claims and grants, event signal tags, and event data schema
+ - GeMa State Policy Module :: aka <<<policy module>>>. A collection of SLS files, for example as gema-sls-core (GeMa SLS Core), or gema-plr-core (GeMa PLR Core).
+   - policy module types are the SLS and PLR module types.
+   - not all module types define policy, so not all modules are policy modules. For example the CTL module is not a policy module.
+   - these policy modules are named simply as: =<paradigm>-<type>-<organizing_interest>=, which for a GeMa Core State tree results in the name =gema-sls-core=.
+   - it's expected that a salt master may use multiple sls policy modules, organized into a lookup precedence according to their query order.
+   - the "gema-*-core" modules may be "stacked" to, (for example), seperate and overlay site-local policy from the policy provided by "core" configs
+   - the order of evaluation of stacked policy modules can be profoundy impactful to the result of a policy evaluation
+   - Notably, in Salt terms these policy modules are simply additional roots and pillars, so a high degree of flexibility is available
+   - The two established types of policy modules are _state_ tree and _pillar_ tree, abbreviated to _SLS_ and _PLR_ respectively.
+   - Policy modules are generally expected to be grouped by type. Other types besides SLS and PLR may be useful and are not excluded or discouraged but are not treated to a comprehensive guidance in GeMa Paradigm at present.
+   - The composition of policy modules is highly flexible and composable, such that many may be combined into a single =SALTENV= environment, (such as =base=), or each may constitue their own environments.
+   - GeMa Paradigm recommends that gema-sls-core and gema-plr-core be provided as part of the =base= environment, such that it's available in other environments and other environments may override it.
+   - This makes it more feasible to keep site/purpose specific policy modules minimal, focused and managable. This in turn makes them more testable, managable, and useful.
+   - You may imagine that a SLS file that becomes increasing generalized may eventually be suitable for inclusion into the GeMa Core. While PR are welcomed, this is always at the discretion of the designer.
+   - it's anticipated that a master and syndic may use a different set of policy modules according to situational needs
+   - GeMa paradigm encourages the use of GeMa Core's policy modules for all salt masters as a means of providing a
+   - As a security note, any time a Salt master uses an external source for SLS or PLR information, it's important that that external source be trusted. While it may be adequate to do protoyping by pointing to the Github repos, these should be cloned to a trusted location under your control prior to consequential use.
+ - GeMa Workflow Environments a/o Stages
+   #+BEGIN_SRC plantuml :file ./media/viz-policy-workflow-layer-stage-release.png
+   digraph g {
+
+     graph [rankdir=LR]
+
+     subgraph cluster_0 {
+       label="vestibule_workflow"
+       adhoc -> workreq [label="peer-review"]
+       adhoc -> cdr [label="critical design review"]
+     }
+
+     subgraph cluster_1 {
+       label="baseline_workflow"
+       graph [rankdir=LR]
+
+       subgraph cluster_2 {
+         graph [rankdir=TB]
+         label="sls_core_layer"
+         core_sls_next_branch [label="next"]
+         core_sls_master_branch [label="master"]
+       }
+
+       subgraph cluster_3 {
+         graph [rankdir=TB]
+         label="sls_org_layer"
+         org_sls_next_branch [label="next"]
+         org_sls_master_branch [label="master"]
+       }
+       
+       subgraph cluster_4 {
+         graph [rankdir=TB; style=dashed]
+         label="sls_team_layer"
+         team_sls_next_branch [label="next"; style=dotted]
+         team_sls_master_branch [label="master"; style=dotted]
+       }
+
+       subgraph cluster_5 {
+         graph [rankdir=TB]
+         label="plr_core_layer"
+         core_plr_next_branch [label="next"]
+         core_plr_master_branch [label="master"]
+       }
+
+       subgraph cluster_6 {
+         graph [rankdir=TB]
+         label="plr_org_layer"
+         org_plr_next_branch [label="next"]
+         org_plr_master_branch [label="master"]
+       }
+       
+       subgraph cluster_7 {
+         graph [rankdir=TB; style=dashed]
+         label="plr_team_layer"
+         team_plr_next_branch [label="next"; style=dotted]
+         team_plr_master_branch [label="master"; style=dotted]
+       }
+
+       team_sls_next_branch -> team_sls_next_branch [label="tag-release"; style=dotted]
+       org_sls_next_branch -> org_sls_next_branch [label="tag-release"]
+       core_sls_next_branch -> core_sls_next_branch [label="tag-release"]
+
+       team_sls_next_branch -> team_sls_master_branch [label="deploy-release"; style=dashed]
+       org_sls_next_branch -> org_sls_master_branch [label="deploy-release"]
+       core_sls_next_branch -> core_sls_master_branch [label="deploy-release"]
+
+       team_sls_master_branch -> org_sls_master_branch  [style=dashed]
+       org_sls_master_branch -> core_sls_master_branch
+       team_sls_master_branch -> base_sls_env [style=dashed]
+
+       org_sls_master_branch -> base_sls_env
+       core_sls_master_branch -> base_sls_env
+
+       team_plr_next_branch -> team_plr_next_branch [label="tag-release"; style=dotted]
+       org_plr_next_branch -> org_plr_next_branch [label="tag-release"]
+       core_plr_next_branch -> core_plr_next_branch [label="tag-release"]
+
+       team_plr_next_branch -> team_plr_master_branch [label="deploy-release"; style=dashed]
+       org_plr_next_branch -> org_plr_master_branch [label="deploy-release"]
+       core_plr_next_branch -> core_plr_master_branch [label="deploy-release"]
+
+       team_plr_master_branch -> org_plr_master_branch [style=dashed]
+       org_plr_master_branch -> core_plr_master_branch
+       team_plr_master_branch -> base_plr_env [style=dashed]
+
+       org_plr_master_branch -> base_plr_env
+       core_plr_master_branch -> base_plr_env
+
+       subgraph cluster_8 {
+         randir="TB"
+         label="live policy"
+         base_sls_env [shape="star"]
+         base_plr_env [shape="star"]
+       }
+
+
+     }
+
+   }
+   #+END_SRC
+
+   #+RESULTS[04b54a9302aa26d7d55609aed34a7b8e8ff46100]:
+   [[file:./media/viz-policy-workflow-layer-stage-release.png]]
+
+   - Baseline, aka base or master
+     - rigorously high-quality, "live" policy
+   - Next
+     - policy that has been made ready for base and is staged for coordinated import to base. This can be helpful in the case where the component parts of a change are distributed in more than one policy layer, (which usually translates to multiple git repos)
+     - In fact, Next is merged onto Base to upgrade Base and provide for a visibly predictable upgrade path
+     - this has the effect of allowing groups of changes to snap into place with greater synchronicity to avoid the peril out out of sync policy modules
+     - updates are collected via PRs, though they may be "cooked" using the Vestibule workflow
+     - Releases should be tagged similarly across all "next" branches so that merges from next to master can be coordinated by tags 
+   - Vestibule
+     - accessible but sequestered are reserved for policy workshop for adoption to other environments, ad-hoc tasks, and other less-rigorous or didactic state-craft

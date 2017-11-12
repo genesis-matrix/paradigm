@@ -1,0 +1,553 @@
+--- # GeMa Paradigm Notions
+Ordered Notions:
+  - Principles
+    - casual assumptions, when honored can translate to efficiencies
+    - move fast, be responsible
+    - favor discoverability, safety, auditibility, integrity, adaptability
+    - lower the insight to implementation cost, such that insights are more easily actionable
+    - permissible disinterest, aka I can be effective with "my stuff" without being required to care about "other stuff"
+  - Policy:
+    - seperation of concerns using layers
+    - 
+    - functional abstraction: you can be effective without needing to be 
+  - Practice:
+    - secrets mgmt:
+      - secrets are stored in an SDB backend, sdb references are embeded and managed/distributed using the pillar
+    - Layers
+    - SLS Style Guide:
+      - preceed each stanza with an octothorpe, optionally with a brief description. This aids comfortable visual inspection and terse per-stanza docstrings.
+      - seperate stanzas and sections with four carriage returns, (aka three visible blank lines). This aids comfortable visual inspection.
+      - use UUIDs for stanza IDs. This aids addresability, composability and auditibility.
+      - for multi-invoked stanzas, include invocation variables in stanza IDs.
+      - SLS files have a standard format:
+        - "file_begin" section:
+          - tags: {"begin": [BOF, "##"], "end": ["##", ""]}
+          - desc: used only to identify the beginning of file content the when streamed seperately from
+          - templatized example: |
+            ##
+            ## [<optional: file name or path>]
+            ##
+        - seperator
+        - "_META" section:
+          - tags: {"begin": ["", "##_META:"], "end": ["##", ""]}
+          - desc: YAML formated description to aid/convey human understanding of the contents, purpose, context, etc of the file
+          - templatized example: |
+            ##_META:
+            ##  [purpose: []]
+            ##  [prospectus: []]
+        - seperator
+        - "JINJA" section:
+          - tags: {"begin": ["", "##" + optional_whitespace + "<JINJA>"], "end": ["##" + optional_whitespace + "</JINJA>", ""]}
+          - desc: .
+          - templatized example: .
+          - practical snippets example: |
+            ##<JINJA>
+            {%- set 
+            ##</JINJA>
+        - seperator
+        - "Stanza(s)" section
+        - seperator
+        - "file_end" section:
+          - tags: {"begin": ["## EOF", ""], "end": [EOF]}
+
+
+
+      #
+
+
+
+Observation:
+  - the pillar is your new DSL/API:
+    - config data in salt is all data structures
+    - best practice is the use the pillar to drive everything
+    - pillar is a strength of salt, but to becoming increasingly central there are shortcomings to address:
+      - there are insufficient conventions, tooling for managing this satisfactorily
+      - PoLS violation: there is no recursive symbol resolution
+      - its not always clear what to include, in what way, and at what point
+      - not all relevant data sources are available in the pillar out of the box:
+        - this isnt too bad since many, (ex. nodegroup ext_pillar), are easily added
+        - others are availble by default but require some configuration, (looking at you pillarstack)
+        - yet others, (ex. consul, vault), require standing up external 3rd-party services and interfacing with them
+
+
+Misc:
+  - Advisements
+  - Guidance
+
+
+
+Refs:
+  - https://www.python.org/dev/peps/pep-0008/
+  
+...
+--- # GeMa Workflows
+ - Converting Business Requirements to Technical Requirements
+...
+--- # Q&A Graph
+Questions on GeMa Paradigm:
+  - Q, how did it come about:
+    - A, emerged as the result of an investigation into how to "Operationalize" Saltstack
+    - A, co-evolved with, (and accelerated by), GeMa Workstation
+  - Q, what is it:
+    - A, a low-friction way to start using Salt quickly
+    - A, a collection of guidelines on how to effectively express intention in Salt
+    - A, a collection of curated best practices
+    - A, a collection of organized conventions
+    - A, a collection of organized presets:
+      - gitfs roots
+      - pillarstack
+      - consul pillar
+      - vault sdb
+    - A, a collection of organized
+    - A, provide simple answers to common operations and lifecycle questions:
+      - Q, how do I setup
+    - A, an effort to flatten the learning curve of Salt
+    - A, along with GeMa Workstation, encourages a safe, productive and playful approach to designing systems
+    - A, an effort to remove surprises and reduce the discovery cost while designing with salt
+    - A, an effort to adhere to the principle of least surprise 
+...
+--- # Problems a/o Inefficient Costs w/ Discovering a/ Using salt
+Observation:
+ - I found that the pillar doesnt do recursive symbol resolution, which is something I assumed it did and becomes necessary for highly complex data modelling.
+
+Background:
+ - There are systems in Salt that _do_ do this but theyre not available using the gitfs pillar meaning that a local checkout of the pillar is needed.
+ - the pillar is highly valuable, dynamic and arbitrarily large set of data and needs to be seriously protected if its going to be distributed
+ - happily its only on the master, even if theres only one master its still "distributed" in my view
+ - I want data designers to have 100% confidence in using the pillar with their most business critical secrets
+ - especially for a bootstraping project I want to make it easy for folks
+
+
+Questions/Problems:
+ - does salt have like a vault or something anagalous?
+
+
+
+Predictions:
+ - there is always the possbility that its be desirable to setup mutilple masters
+ - the pillar is most useful when we think about how to use it to model data and I dont want data designers to be able to assume that anything and everything can safely go in the pillar
+
+
+
+Evidences:
+ - so to support this I wrote a state thtat will mount /srv/pillar as a tmpfs volume and changes the swapfs to use a one-time encryption key right but those masters are under your control right?
+
+
+
+
+...
+--- # 
+
+ - there is integration with Hashicorps vault: https://docs.saltstack.com/en/develop/ref/pillar/all/salt.pillar.vault.html
+   - so this is nice because it prevents offline attacks
+   - a way to possibly move beyond the local share
+ - which is a good solution, but to maintain the change controlled git-backed workflow this is simpler to get started and easier to understand
+   - because its still git
+   - right, just pull and get the latest pillars
+   - just has to be done on master, can be gateway controlled that way
+   - the state will setup the secure in-memory filesystem then checkout the pillar to that dir
+ - the vault integration could be a nice to have for down the line but having a well composed solution for bootstraping securely makes me happy
+   - it should be sufficient as a basis
+  - and I can then use it with other pillar systems, like 
+    - https://docs.saltstack.com/en/latest/ref/pillar/all/salt.pillar.stack.html (which does provide recursive symbol resolution)
+    - and https://docs.saltstack.com/en/latest/ref/pillar/all/salt.pillar.file_tree.html (which makes managing binary secrets super easy)
+
+ - the pillar auto-refreshes every 60 seconds
+   - also, either webhooks, or schedule-based or both, both are supported, schedule-based is more resource intensive for sure but simpler so I may seek that out first
+     - the third option is in response to imperative command
+     - and even then, a git pull is hardly gonna bring anything down to its knees
+
+ - so if there is a single controller that the masters report to, a command to update could be issued to affect all of them at once
+   - yup, its pretty efficient w/ the sha1 comparisons and such
+   - also, continued cool:
+     - this will support gpg encrypted contents so while I wouldnt expect it to be a common pattern, it is possible to have an additional layer of security - enough that a public git repo could be used for a lot of confidential efforts
+     - for now Im going to stay away from gpg in the pillar, its really cool, but is very likey to confuse things imho
+
+--- # relationship to Kubernetes
+ - Kubernetes is a significant project to GeMa
+ - a big part of this design is leveraging kubernetes but Im thinking of re-doing the schedule to move things around to support a smaller MVP
+ - k8s can come later, but this change really helps close the gap
+ - it allows a person to say, "just add more masters"
+ - spin up a master on a cloud service, etc w/o too much worry about data leakage
+
+--- # Secrets/Pillar data on Minion local-fs
+ - so tmpfs means that the data is fast and not persistent on disk
+ - per-boot encrypted swap means that if theres memory pressure and the tmpfs needs to be paged out, even if there is an unplanned power outage, the data shouldnt be recoverable
+
+ - its not perfect but its an effective mitigation that enables running mulltiple parallel masters, even isolating them by networks or according to their flocks
+   - because its still git syncd
+
+ - I actually opened a feature request to have pillar stack support gitfs and the maintainer closed it
+   - but then gitstack came along an nailed the use-case
+
+ - so the pillar is a heirarchial key value store
+   - Q: your talking about dynamically generating data for a state request, correct?
+     - A: well the end goal of that process is to feed data to do an action, correct?
+     - i guess its mostly that, but (maybe) itd also be a useful refernce for other systems
+       - for example, if I wanted to store an inventory list of servers for access from another system I could put that in the pillar and access it via API
+   - sure, all data can be usefull if easily accessible
+
+ - for now Im trying to think about how to order these things so that its comfortable to manipulate in a powerful way that doesnt violate the principle of least surprise for an operator
+
+ - the more I think about this the more I realize that the pillar needs to be able to create a fairly dynamic and complete model of the infrastructure details in order to be more useful
+
+ - so your talking hierarchy in the pillar as well as the order in which they inherit  
+
+ - to accomplish there there are a few subsystems that Ill combine: the pillarstack system (which provides recursive symbol resolution), the consul system (which uses the consul key value store to update the pillar with runtime info), and the default pillar which uses the top file
+
+ - its a data assembly line
+
+ - each of these subsystems provide slightly different things and work slightly differently
+   - but they are stackable in any order because theyll inherit the work from the underlying system
+
+   - Ill do pillarstack first, this will be more static but it will help to setup some usage patterns about how data is associated with attributes in a fairly rich way
+   - you def work more abstractily more of the time then I do, im kinda jelly
+   - then the normal pillar because that is CMd in git, it will make controlling the flow of that complete data model more visible as a control point
+   - then the runtime pillar: consul
+     - because if a peice of data needs to be added it should be possible without needing the layers below it to change
+ - so pillarstack -> gitfs/vanilla -> consul
+   - and consul is optional
+
+ - pillarstack ships with salt so its OK to bake it in
+
+ - so if a minion has a certain domain-suffix (for example) it will get access to the data for that domains DNS controllers
+ - pillarstack will be kept generic, and custom work will go into the vanilla/gitfs pillar because its more likely to change over time
+
+ - pillarstack will be focused on building a system of data, vanilla will be focused on customizing it to a site, and consul will be focused on making it dynamic and responsive ☺
+
+ - because pillarstack goes first, the values it resolves will be available to vanilla, so although it cant make internal recursive references, it can make references to the data that its inherited, so its not a fully-free axis of movement but its an improvement
+
+ - i see, so there are restrictions, and since pillar has the widest scope of generic data then it should go first
+
+ - it means the operator will need to know a little about this system to use it (which I try to avoid) but as many assumption as possible can be built into pillarstack so that eventually the vanilla can be simple, expressive and sane
+
+ - It seems to me this is about automation and I dont see many people going in and committing to git, atleast not in the standard way?
+
+ - yeah, because as the vanilla system evaluates its pillar it will be able to fufill references to pillar data thats already in the model provided by pillarstack, but not any new pillar data generated by itself earlier in its evaluation. its an odd restriction but Ill seek to manage it with good pillarstack policies
+
+ - but if a person is going to use it, I have to be able to point then at a control point and that may as well be git ☺
+
+ - kk, or a web page that creates a commit?
+
+ - the other almost funny wrinkle is that pillarstack will operate on the exact same directories that are provided by the gitfs/vanilla subsystem
+
+ - just saying, how many people need to have git access and is it a good idea...
+
+ - sure it could be bitbucket or stash or whatev
+
+ - so there will always be guis
+   - but in this system design its a requirement that every part of it be change-controlled
+   - at least up to the runtime stuff that we dont necessarily want to tbe change controlled
+   - yeah, its kinda true
+
+ - consul, the runtime pillar will kinda help with this as well: https://demo.consul.io/ui/
+   - right but the interface to that, I just would not trust many people with git access to a repo
+   - yeah, I think there will be a need for a well-informed integrator as change requests emerge
+   - the nice thing is the whole stack should support making it all testable
+   - its neat, its service discovery, service health montioring, and key-value all in one
+   - since the inventory of a site doesnt need to be commited to git, Im figuring that stuff can live here, in what Im calling the runtime layer so that likely, most management will take place here and can even be queried and manipulated via API
+
+ - all of these pillars have slightly different interfaces but I think this order makes the most sense
+
+ - I can see where your concern was the data problem does seem like it can get out of control
+
+...
+---
+Title: GeMa, Introduction and Applicability
+Purpose: To introduce GeMa, answer questions and evaluate applicability for adoption and investment w/i DevOps @ 14w.
+Agenda:
+  - Overview:
+    - Q, what is it (design)
+    - Q, what does it do (enablement)
+    - Q, why does it matter to us now (implications)
+    - Design:
+      - objective: low-cost, adaptable, dynamic, provable, portable systems design
+      - components:
+      - GeMa Controller: is a portable and scriptable workstation for modeling, reasoning, and communicating about computer technology topics. 
+      - GeMa Paradigm: is a powerful and disciplined approach for safely managing runtime, operational, and other system design data sets.
+
+  - Demo:
+    - Snapper (for OS-level snapshot and rollback)
+    - Artifactory
+    - etc, etc
+
+  - Workflow:
+    - enhancements and fixes are requested via Jira
+    - (opt.) test-driven acceptance criteria is defined using testinfras
+    - a branch for this work is created in the gema {{ your_org }} repo 
+    - work underway on the feature/fix using GeMa workstation (as needed/appropriate)
+    - the work can be tested by colleagues during dev by pulling the branch
+    - a PR is submitted to merge the work branch
+    - the PR is peer-reviewed, and if appropriate, others may be brought in for demo a/o consultation
+    - when adopted, the PR is merged to live staging branch
+    - when successful, the PR is promoted to live master
+  - Uses:
+    - Current 14West-related Work:
+      - Extensively used for work to: develop Snapper VM config
+      - Aided in development, testing, learning of: Splunk, Artifactory, 
+      - integration with: docker, Artifactory, FreeIPA, Atlassian
+    - Future {{ your_org }}-related Work:
+      - integrations with: AD, PMP, AWS, MongoDB, Splunk Event Logging
+      - eval of Saltstack Enterprise Support, which includes the Web Mgmt GUI
+  - Asks:
+    - [ ] innovation project: to finish/update GeMa paradigm implementation on our salt infrastructure in TST and PRD
+    - [ ] innovation project: to produce VMware utilization reports to aid in billing
+    - [ ] innovation project: to port GeMa workstation to native Linux
+    - [ ] innovation project: on VM creation, create Jira issues with system details
+    - [ ] Discovery/PoC: creating VMs on vSphere from Templates using Salt
+    - [ ] Discovery/PoC: executing and wrapping the PubSvs-style provisioning process with Salt/GeMa
+    - [ ] Discovery/PoC: investigate workflow improvements for VM life-cycle mgmt, (particularly HW Provisioning)
+    - [ ] funds for SSCE training and exam w/ goal of becoming Saltstack certified this year
+    - Q, under what circumstances would Saltstack Enterprise Support be considered warranted
+    - Q, what GeMa capability areas are the most meaningful at 14west, and that youd like to see the most investment in
+    - Q, what specific and general goals would you like to see GeMa adopt
+    - Q, any suggestions on the best case to make for adopting GeMa
+    
+    
+  - Next Steps:
+    - Q, is GeMa suitable for adoption, if not, why not
+    - Q, identify continuing objectives, hurdles, criteria and the like
+
+
+      
+--- # related ideas
+- practical tooling for engineering discipline as applied to system design and operational management
+- Reproducible Research
+- DRY and other programming best practices
+- Literate Programming
+- Cattle not Pets
+- Immutable Infrastructure
+- Event-based Infrastructure
+- Low-cost, Consistent Implementation of Best Practice
+- Mean Time To Recovery, (MTTR)
+- Test-Driven Infrastructure Development
+
+
+
+...
+--- # Intro GeMa Workstation is DONE, now intro GeMa Paradigm
+I covered enough of the GeMa workstation in the first meeting to provide some sense of what it is.
+For the second meeting Ill use the workstation to introduce the idea of the GeMa paradigm, which is a disciplined operations-focused approach to organizing and expressing system configs.
+As part of the paradigm discussion Ill show a couple demos. Any thoughts on what would make a good demo or good use-case example? 
+(1) demo of state to stand up Artifactory server , (2) demo of state to apply OS-level rollback configuration, (3) demo of simple in-system requirements documentation and checking
+Well discuss existing and potential use cases, and some of the ways this could be integrated into new and existing workflows.
+Finally, Whats the best route to designing a successful innovation project?
+Ive included some questions that I think will help to answer that question, and hopefully will allow us to identify some next steps along the route of creating a proposal and associated LOEs for wider review.
+Cheers and thanks for your involvement!
+...
+---
+##
+##
+##
+
+
+
+lookup:
+  issue_orgid:
+    52a6d8c9-c1fe-4657-bf6c-473cbad0225e:
+      credset: []
+      configmap: []
+      tgttags: []
+      uris: []
+      
+      
+      
+## EOF
+...
+---
+Machines, Services, Accounts
+
+ - Machines will be configured as: <project>_<role>, corresponding to their names: <project>-<role>-<deployenv><iterator>[<descriptor>..]
+   - this reflects a resource allocation mapping. This resource of this role type is assigned to this project.
+   - machine roles are expected to use a common role configuration, even among projects
+   - machine roles names are pointers to a UUID-labelled resource. This can appear as salt://discrete/machine_role/<descriptive_text>
+
+ - Services will be configured as: <project>_<role>, which will look similar but with different implications.
+   - this reflects a service customiation/specification. This service type is configured to the requirements of this project.
+   - it is natural to assume that service:<project>_<role>, will correspond to machine:<project>_<role> and that is intended to facilitate quick recognition of relationships, even in a wildly heterogenous environment. Its the beginning of understanding, by providing context, but not the end. 
+   - the ability to assign a service:<project>_<role> to a machine with a matching role, even in a different project is a design goal
+   - the ability to run multiple different service:<project>_<role>s for different projects is explicitly not garunteed. In other words, similar services from different projects are not required or expected to co-exist on the same machine.
+  - services should present the following state options
+    - init (by 
+  - services should present the following metadata (pillar-backed)
+    - machines_available, defines the list of all machines this service may (is permitted to) be applied to 
+    - machines_assigned, defines the list of all machines where this service is or is set to be acti
+    - machines_provisioned, defines the list of all machines where the service state is applied and have not been unapplied
+    - machines_onduty, defines the list of all machines where this service is provisioned and onduty
+  - service venn diagram:
+    - available:
+      - assigned
+      - provisioned
+      - where a system is assigned AND provisioned, it may be onduty (aka active)
+    
+    
+
+
+
+Q: how to handle refcounting in infrastructure design
+  - if a configuration element is no longer needed and is not being used it should be garbage-collected i.e. throw-away
+  - but within a deep network of interdependencies, how to know when this is safe to do
+  - this bears resemblance to the problem of ref-counting for garbage-collecting in memory-managed runtime environments
+  
+Notes:
+ - discrete resources MUST reference only other discrete resources using only UUIDs
+ - when delivering a resource, or tracking requirements delivery, the following should be noted: Common Language Name, top-level UUID (where possible/available), the genesis-ctl SHA1 (which should provide the SHA1s of all submodules as well) and a date (if desired)
+
+...
+---
+enterprise:
+  - low-cost, adaptable, dynamic, provable, portable systems design
+...
+--- # Secrets
+ - Q: Would you be OK with the idea of an internet accessible secret server?
+   - The benefits are that it make collab easier because secrets dont need to move, only the references to them.
+   - Im also understand having reservations.
+   - many app DBs are exposed to the internet
+ - Vault:
+   - is distributed
+   - Q: can we secure it behind network/nat barriers while still allowing replication
+   - the backends would need to be distributed too, perhaps Consul
+   - this would offer the posibility for the custom apps to talk to consul/vault for their config 
+     - it might be cool, then again using salt to set system variables is also an option
+
+--- # GeMa Labels
+ - labels are the simplified entry points for describing minions, and lookups are the data/actions that use the labels to expand 
+ - give you the ability to add labels (that may trigger other actions), to call states (and provide per-state variables), and to add other organizing info for the minion.
+ - label idea is inspired/borrowed from Kubernetes, then extended
+ - labels are just a dictionary
+ - Q: and they function as imports?
+   - A: nope, just tags, but they are dereferenced from within the pillar to expand into lookups which may add metadata, state files and sls-specific variables and more
+   - k so tag gets expanded/filled-in
+   - yes, so for many systems, itll only be necessary to add labels
+
+ - Q: so what do you mean by entrypoint
+   - yeah, so to simplify things, there are only two ways to affix labels to a target and these are: minion_id and nodegroup
+   - all other labels are expanded from one of those two entrypoints. This is done in part for simplicity, but also because nothing more is needed or desirable
+   - lookup at the minion id, youll see lots of other node data, including data expanded to labels
+   - minion_id and minion_nodegroup are both garunteed to be correct by salt
+   - so the file youre looking at is a lookup file
+   - the label (represented as json) would look like this {label: {minion_id: example-minion}}
+   - that label is applied implicitly
+   - nodegroup works similarly
+   - so those are the "entrypoints" because they affix the initial labels
+   - in the lookup file for an entrypoint (minion_id in particular), youll notice there are also secondary_labels and secondary_lookups
+     - thats were an entrypoint lookup can throw out other references to use the same label lookup convention.
+     - it spits out the labels that it aggregated?
+   - so you can start simply, and tersely but expand to add machine description in the data structure that you see before you.
+   - so the lookup can get similar structured data and stuff it back as label, to let you extend configurations?
+     - So a label is really like a property, in programming terms i guess
+
+ - Q: and a lookup is like a dynamic way of aggregating entry points which are of different types.  and an entry point is another set of generated configs 
+ - I describe it as a data-structure because thats how the operator would work on it
+   - and because the labels are described as embedded dictionaries, every label can produce a chain of actions
+   - So under label, the meaning of the dictionaries flow like this: question ... answer ... detail
+     - so label:minion_id is the question
+     - label:minion_id:example is the answer
+     - in the example of the minion_id question, the answer is supplied by the system
+     - so this is sort of like a template
+   - note how anchored references are used to move the minion_id metadata back up into the tree
+     - it makes it possible to make the data expandable from a single tree
+     - and that means, for additional bonus that properties that propogate through the system in the way can be traced back to their source, becuase the source data is still in the tree
+   - similar trees are merged, but the entrypoint labels are always unique so are preserved as-is
+     - non-unique labels are merged recursively to allow them to accrete
+     - very cool, im starting to see why did it like this, so  can split off each logical part of the config specially if needing different accesses
+     - In case you cant tell Im very happy with this solution. I finally feel like the data-management story is complete.
+     - and its handled highly dynamically
+     - this might go further than kube, but was very much inspired by it
+     - its nice because there is a lot that doesnt need to be stated or can be stated tersely
+     - the tree can fill in to become useful, but the order of operations and ability to audit isnt lost
+     - ... and (almost most importantly), it supports templating to a much higher level because default state file variables can be overrided on a per-minion basis
+   - this minion-specific data can be expanded into its own lookup as lookup:sls_path:{{sls path name}} with an embedded dict of custom variables
+     - so you use a variablized template to fill minion-specific data in SLS and PLR as needed
+     - its fairly generic and can be included as boilerplate in each state
+--- # Templatized Top
+ - the state top.sls and pillar top.sls are simple but fully templated so dont need to change unless new entrypoint labels are added (but minion_id and nodegroup are pretty comprehensive)
+   - under normal circumstances they never change
+   - since what you where talking about labels is a way to add entrypoints dynamically or ateleast without modifying the root sls files
+ - over time well be able to add more templating to the minion_id lookup, replacing the literal example-minion with a fill-in
+   - this will make it possible to symlink example-minion2 to example-minion1 where you want them to have the same configs
+   - for like clustering etc... but clustering is just one example, lots of times for just uniformity
+ - so with highly generic states with sane default values that can be overrided it becomes possible to describe an entire new system in a single file
+ - because of the way this is structured labels can be added by external systems like mongodb or consul
+   - labels also provide good simple interfaces for integration with other systems, like Active Directory or vault
+   - if a machine is a member of a certain ADgroup, that can be a new entrypoint (as part of an existing nodegroup) and it gets states assigned to it
+     - All of a sudden AD becomes a way to manage machine labels
+ - it feels like the solution I want to use
+   - with simple interface
+   - built to be troubleshooted and extended with reasonable effort
+   - can stood up quickly with re-usable and sharable states.
+ - This is the Genesis-Matrix
+   - The rest is polish and extending functionality.
+--- # Collaborating with a Friend or Colleague
+ - setting up a secret sharing system isnt really required if we can both access a private git repo
+   - thats a lower bootstrapping cost
+
+...
+--- # GeMa CTL uses Vagrant  and Packer
+ - ref: ...???... demo video on asciinema
+ - so in the video youll notice that the vagrant box is built when a presence-check fails
+   - the VM inventory is based on the salt roster, and the vm-image name is pulled from the rosters value for the basebox_image grain
+   - for each of the defined VMs
+   - finally, the VMs are created w/ a bunch of hostnames and configured to use a local DNS resolver
+   - this is very cool, its an instant dev sys
+ - vagrant is configured to recognize when as master is created and assign it to the salt.vagrant.dev fqdn
+   - because the minions will reach out to salt and the fallback domain suffix for the local resolver is vagrant.dev, this means that minions will supplicate to that VM on start up w/o need to configure networking options
+   - magic!  
+     - you could deploy pre-configured systems like hadoop or eucalyptus etc..
+   - yeah, it lowers the bar and lets people focus on their designs
+...
+--- # howto, Use this Repo
+ - context
+   - [0/5] overview
+     - demo: event system via system alerting
+     - demo: state system via machine provisioning
+     - demo: state and targeting system via application a/o service provisioning
+     - demo: reactor system via security response to events
+     - capstone demo: orchestration system via auto-scaling
+   - info/notes
+     - on GeMa Modules: [SLS, PLR, CTL, etc.]
+       - CTL: Lab/Workstation
+       - SLS: State Policy
+       - PLR: Variable/Logic Policy
+       - PKI: (wip.) Graph Trust
+
+       - see: policy module definition in the LEXICON
+     - on fork, blend, or replace these repos with your own efforts:
+       - the submodule names follow the convention =project_name= - =component= - =label=:
+         - such that you may experiment with your own personal sls repo called gema-sls-foobar
+         - the =core= label indicates that this is part of the set of upstream repos and intended to be publicly shared
+         - all =core= repos exist so be easily forked as a basis for private repos
+         - consider sharing common state, configs, a/o pillars with the upstream core repo by way of pull requests
+       - to replace the gema-sls-core repo with your own gema-sls-foobar repo:
+         - add the gema-sls-foobar submodule to ./mnt/git/gema-sls-foobar, then
+         - update the symlink at ./mnt/git/gema-sls to point at it
+         - in this way you can safely track and blend multiple upstream sources while easily switching among them
+       - a Minion grain, (a key-value store) with key provision_target and value vagrant is added to each minion by Vagrants provisioner and is used to record generally static attibutes.
+     - on Composing Policy Modules Using GeMa Paradigm
+       - GeMa Core in intended to provide a good starting point and basis for your own site or purpose specific work.
+       - While you are encouraged to add sharable policy modules to the Core, its easily forseeable that there will be a need for work that is contributed in a variety of states of maturity
+
+...
+--- # info, Targeted Service Integrations
+ - context:
+   - info/notes
+     - on Initial Understanding a/o Discovery:
+       - The purpose is to demonstrate a scaled-down but fully-realized Salt master with practical and representative service integrations.
+       - The listing of services to integrate with Salt: >-
+           |-----+------------------------------+------------------------|
+           | wip | logging                      | ELK, syslog            |
+           | wip | realtime data source         | MongoDB                |
+           | wip | CM-controlled data source    | Github/Gitolite/GitLab |
+           | wip | operating console, WebGUI    | Saltpad                |
+           | wip | alerting                     | Pushover               |
+           | wip | chatops                      | ErrBot                 |
+           | wip | container cluster mgmt layer | kubernetes             |
+           | wip | rapid-deploy apps            | docker/rocket          |
+
+
+...
+--- # GeMa Desired Outcomes 
+ - A datacenter-wide message bus.
+ - Standing up a managed control hub (as salt-master) that is quickly bootstraped to be fully and dynamically manipulable.
+ - Enable dynamicism and agility in operations.
+

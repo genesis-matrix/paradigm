@@ -1,0 +1,145 @@
+# -*- mode: org -*-
+#+SETUPFILE: ~/.vault/cfgs/org-central/org-setupfile
+#+TITLE: notes on GeMa
+* synopsis
+* advisement
+* TODO tasklist
+* chapters
+** Introduction to GeMa
+** Solution Design
+:PROPERTIES:
+:ID: 909D8405-A986-42F3-B1D7-A3B9EC4F80E4
+:END:
+[2017-10-29 Sun 23:47]
+[[git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-29}::10][git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-29}::10]]
+ - context ::
+   - [/] overview
+   - info/notes
+     - srcs
+       #+NAME: 909D8405-A986-42F3-B1D7-A3B9EC4F80E4-srcs
+       #+CAPTION: reference list
+       | ! | title | url                                                                    | desc | rowid   |
+       |   | title | url                                                                    | desc | rowid   |
+       |---+-------+------------------------------------------------------------------------+------+---------|
+       | / |       |                                                                        |      | <7>     |
+       | # |       | https://docs.saltstack.com/en/latest/ref/states/compiler_ordering.html |      | <<B7AF199C-AD2F-4AD9-A21D-E37336547EFE>> |
+       | # |       | https://docs.saltstack.com/en/latest/ref/states/layers.html                                                                       |      | <<7FF4B8CF-B66E-45B2-BF1A-F928004E42DE>> |
+       #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+     - on Organizing Features
+       - nb, the compilation unit aka state data dictionary
+     - on A Designer's Tools
+       - Pillar-Driven Highstate, (w/ templated top.sls)
+         - top-level declarations (extend, use, include, etc) to weave a/o integrate the highstate SLS together
+       - Pillar-Driven Orchestration
+         - compose features into new features, or together to make feature-packs
+   - Questions
+     - Q: does a highstate permit the use of multiple top-level declarations, (by way of multiple SLS where each ID is used no more than once)
+       - A: No. Highstate combines individual SLS into a single data structure
+       - this means that a highstate composed of correct and valid SLS may still error based on the implementation details, (declaration use), of the member SLS
+     - Q: is a highstate a single compilation unit, or are each of the SLS in the list a compilation unit
+       - A: Yes, a highstate is a single compilation unit
+       - A highstate is a single data structure.
+       - If you are asking about having the same id in different states the answer is no that won't work
+   - log
+** visualization: Packer Vagrant Box Build Configuration
+ - context ::
+   - info/notes
+     - on GeMa BaseBox Build Process from a Workflow View
+       #+BEGIN_SRC dot :file ./media/viz-GeMa-BaseBox-Build-Process-from-a-Workflow-View.png
+         digraph g {
+           vagrant_file -> salt_roster_file [label="reads VM entries from"]
+           salt_roster_file -> salt_roster_entry [label="composed of"]
+           salt_roster_entry -> basebox_image [label="has property"]
+           basebox_image -> packer_template_var_file [label="references"]
+           packer_template_var_file -> packer_template_base [label="references"]
+           packer_template_var_file -> salt_minion_conf_file [label="references"]
+           packer_template_var_file -> packer_kickstart_file [label="references"]
+           salt_minion_conf_file -> salt_provision_states [label="specifies"]
+         }
+       #+END_SRC
+
+       #+RESULTS:
+       [[file:./media/viz-GeMa-BaseBox-Build-Process-from-a-Workflow-View.png]]
+
+     - on GeMa BaseBox Build Process from a Systems View
+       #+BEGIN_SRC dot :file ./media/viz-GeMa-BaseBox-Build-Process-from-a-Systems-View.png
+         digraph g {
+           subgraph cluster_0 {
+             label="vagrant"
+             vagrant_file [shape=document]
+           }
+           subgraph cluster_1 {
+             label="salt"
+             salt_roster_file
+             salt_roster_entry
+             basebox_image
+             salt_minion_conf_file
+             salt_provision_states
+           }
+           subgraph cluster_2 {
+             label="packer"
+             packer_template_var_file
+             packer_template_base
+             packer_kickstart_file
+           }
+           vagrant_file -> salt_roster_file [label="reads VM entries from"]
+           salt_roster_file -> salt_roster_entry [label="composed of"]
+           salt_roster_entry -> basebox_image [label="has property"]
+           basebox_image -> packer_template_var_file [label="references"]
+           packer_template_var_file -> packer_template_base [label="references"]
+           packer_template_var_file -> salt_minion_conf_file [label="references"]
+           packer_template_var_file -> packer_kickstart_file [label="references"]
+           salt_minion_conf_file -> salt_provision_states [label="specifies"]
+         }
+    #+END_SRC
+
+    #+RESULTS:
+    [[file:./media/viz-GeMa-BaseBox-Build-Process-from-a-Systems-View.png]]
+
+** Paradigm Activities Guidance for Base Workflow
+:PROPERTIES:
+:ID: CB66CC83-E4A1-458E-A72F-7298D9665C45
+:END:
+[2017-10-30 Mon 01:56]
+[[git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-30}::99][git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-30}::99]]
+ - context ::
+   - [/] overview
+   - info/notes
+     - srcs
+       #+NAME: CB66CC83-E4A1-458E-A72F-7298D9665C45-srcs
+       #+CAPTION: reference list
+       |!|title|url|desc|rowid|
+       | |title|url|desc|rowid|
+       |-|-----|---|----|-----|
+       |/|     |   |    | <7> |
+       |#|     |   |    |     |
+       #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+     - on Organizing Features
+       - nb, the compilation unit aka ...???...
+       - There should be not init.sls for a service feature or feature pack.
+       - Labels should be prefixed with the feature-pack "system" that the features use when the features are not expected to be closely related to the 
+     - on Human Roles
+     - on A Designer's Tools
+       - Pillar-Driven Highstate, (w/ templated top.sls)
+         - top-level declarations (extend, use, include, etc) to weave a/o integrate the highstate SLS together
+       - Pillar-Driven Orchestration
+         - compose features into new features, or together to make feature-packs
+     - on State Craft
+       - dont use top-level declarations
+     - on Policy Craft
+   - Questions
+     - Q: does a highstate permit the use of multiple top-level declarations, (by way of multiple SLS where each ID is used no more than once)
+       - A: No. Highstate combines individual SLS into a single data structure
+       - this means that a highstate composed of correct and valid SLS may still error based on the implementation details, (declaration use), of the member SLS
+     - Q: is a highstate a single compilation unit, or are each of the SLS in the list a compilation unit
+       - A: Yes, a highstate is a single compilation unit
+       - A highstate is a single data structure.
+       - If you are asking about having the same id in different states the answer is no that won't work
+   - log
+
+* extrefs
+** reports
+** defined-terms
+** secrets                                                        :noexport:
+** bibliography
+** footnotes
