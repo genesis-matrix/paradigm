@@ -154,7 +154,7 @@
 :END:
 [2017-06-24 Sat 12:01]
 [[git:~/.vault/uris/gema-ctl/usr/doc/ref-Vagrant.org::next@{2017-06-24}::112][git:~/.vault/uris/gema-ctl/usr/doc/ref-Vagrant.org::next@{2017-06-24}::112]]
- - context ::
+ - context :
    - [0/0] overview
    - info/notes
      - srcs
@@ -168,6 +168,9 @@
        #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
    - Questions
    - log
+     - [2018-10-08 Mon]
+       - an aux utility for vmware, available here: https://www.vagrantup.com/docs/vmware/vagrant-vmware-utility.html not sure when this became important/required
+
  - procedure :: fix, specious forwarded port warning, EM:"... the defined forwarded ports would collide ..."
    - nb
      - https://github.com/mitchellh/vagrant/issues/7948
@@ -186,6 +189,7 @@
        #+END_EXAMPLE
    - (alt.) on MacOSX
      - clear specious port mapping entries from '[incomingtcp]' section of the [[/sudo:localhost:/Library/Preferences/VMware Fusion/vmnet8/nat.conf][/Library/Preferences/VMware Fusion/vmnet8/nat.conf]]
+     - (wip) somehow related: [[/Library/Preferences/VMware fusion/networking]]
 ** info, Vagrant Manager
 :PROPERTIES:
 :ID: 356594C4-EDC9-453A-83EE-9C41E65D80CE

@@ -528,6 +528,23 @@ enterprise:
        - While you are encouraged to add sharable policy modules to the Core, its easily forseeable that there will be a need for work that is contributed in a variety of states of maturity
 
 ...
+--- # Controlling the Repo
+Questions:
+  - Q: how is GeMa used
+    - A: gnu-make is one of the primary means to access GeMa functionality
+    - http://vagrantmanager.com/ is a handy MacOSX-specific GUI for interacting with VM sets. There are some ergonomic rough spots but also lots of upside
+    - (wip) http://www.pyinvoke.org/ 
+  - Q: how to install invoke
+    - on MacOSX: >-
+        # install invoke, if not already installed
+        brew install pyinvoke
+        # create and enter the pipenv
+        make gema-pipenv
+        # invoke is now available, to get started list the options
+        inv --list
+
+
+...
 --- # info, Targeted Service Integrations
  - context:
    - info/notes
