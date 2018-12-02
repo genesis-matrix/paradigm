@@ -209,11 +209,41 @@
        |#|     |   |    |     |
        #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
      - on Custom Commands
-       | idx | name                    | command                               | run_in_terminal | desc |
-       |     | journal                 | sudo journalctl -f                    |                 |      |
-       |     | salt-master:accept-keys | sudo salt-key -Ay                     |                 |      |
-       |     | salt:logs               | sudo tail -f /var/log/salt/*          |                 |      |
-       |     | salt-minion:highstate   | sudo salt-call state.apply            |                 |      |
-       |     | salt-master:messagebus  | sudo salt-run state.event pretty=True |                 |      |
+       | idx | name                      | command                                                          | run_in_terminal | desc |
+       |     | journal                   | sudo journalctl -f                                               |                 |      |
+       |     | salt-master:accept-keys   | sudo salt-key -Ay                                                |                 |      |
+       |     | salt:logs                 | sudo tail -f /var/log/salt/*                                     |                 |      |
+       |     | salt-minion:highstate     | sudo salt-call state.apply                                       |                 |      |
+       |     | salt-master:messagebus    | sudo salt-run state.event pretty=True                            |                 |      |
+       |     | salt-master:manage.status | sudo salt-run manage.status ; read -p"press [Enter] to continue" |                 |      |
+       |     | salt-master:list-keys     | sudo salt-key -L ; read                                          |                 |      |
+       |     | salt-master:rm-keys       | sudo salt-key -Dy ; read -p"press [Enter] to continue"           |                 |      |
+       |     | salt-minion:restart       | sudo salt-call --local service.restart salt-minion                                                                 |                 |      |
    - Questions
    - log
+** info, Shared Folders
+:PROPERTIES:
+:ID: 62A8B2FE-4875-4D71-812E-D8FAB946DA7C
+:END:
+[2018-11-30 Fri 02:57]
+
+ - context ::
+   - [0/0] overview
+   - info/notes
+     - srcs
+       #+NAME: 62A8B2FE-4875-4D71-812E-D8FAB946DA7C-srcs
+       #+CAPTION: reference list
+       | ! | title | url                                             | desc                                               | rowid                                    |
+       |   | title | url                                             | desc                                               | rowid                                    |
+       |---+-------+-------------------------------------------------+----------------------------------------------------+------------------------------------------|
+       | / |       |                                                 |                                                    | <7>                                      |
+       | # |       | https://github.com/dustymabe/vagrant-sshfs      |                                                    | <<271F0BA1-40BA-46B6-B05F-4495C5EECB9B>> |
+       | # |       | https://github.com/mvermaes/centos-vmware-tools | fix broken vagrant share folder on recent CentOSv7 | <<CA690BDC-C7E1-478B-AEE5-8D135BA42F21>> |
+       #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+   - Questions
+   - log
+     - [2018-11-30 Fri]
+       - [2018-11-30 Fri 02:58] NGa evals vagrant-sshfs plugin as preferable alternative to NFS and rsync, mentioned here https://blog.centos.org/2018/05/updated-centos-vagrant-images-available-v1804-02/
+     - [2018-12-01 Sat]
+       - [2018-12-01 Sat 19:48] NGa sets sshfs to be used when 'vagrant-sshfs' is installed
+
