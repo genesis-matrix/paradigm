@@ -3,6 +3,90 @@
 
 * synopsis
 * advisement
+* tasklist
+:PROPERTIES:
+:ID: 35A0C0C8-3E86-4DCE-B00B-37609B56A192
+:END:
+[2017-10-27 Fri 05:14]
+[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-10-27}::1339][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-10-27}::1339]]
+ - context ::
+   - [/] overview
+   - info/notes
+     - srcs
+       #+NAME: 35A0C0C8-3E86-4DCE-B00B-37609B56A192-srcs
+       #+CAPTION: reference list
+       |!|title|url|desc|rowid|
+       | |title|url|desc|rowid|
+       |-|-----|---|----|-----|
+       |/|     |   |    | <7> |
+       |#|     |   |    |     |
+       #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+       - gdocs, doc-merge 
+         #+BEGIN_EXAMPLE
+           Salt Execution Flow (Pillar-driven Walkthrough)
+
+           - read top.sls (top.sls is pillar-based so all targeting and state assignment is via the pillar system)
+           - encounter pillar references in match specs (performing lookup using minion id to get sls_path)
+           - lookup list of states (assigned by minion id)
+           - provide ordered list of state_lst
+           - iterate over state_lst to get listing of per-minion state.sls_path
+           - with the list of per-minion states constructed, the states are sent/returned to the minion
+           - the minion will seek to compile the states into low_sls
+           - the states will seek to add contextual pillar data (as a dictionary) to a variable called "lookup" by quering pillar data using the state's sls_uuid
+           - the pillar will search for a dataset/dictionary at: "lookup:sls_uuid:{{ sls_uuid }}"
+           - there are potentially more than one lookup, but the sls_uuid lookup provides the default values for a state before any other context is examined
+           - the data here will contain the default values and a list of "lookup_overrides" that may be checked for merge/stack/include
+           - FYI: lookups after sls_uuid ("lookup_overrides") use pillarstack to merged on top of, replace or delete, the values in the default dictionary
+           - the "lookup_overrides" will be a list of attributes that may be searched on. For example, (where a "lookup_override" includes "G@id") to locate a minion-specific config, looks in the pillar at: "lookup:G@id:myminion:{{ sls_uuid }}"
+           - it should be possible to stack levels of specificity for each state according to a potential list of attribute-based overrides
+           - Q: should the list of overrides should be the same for all states, so that it doesn't need to be defined per-sls
+           - A: Yes. A standard list should be specified, and where a file doesn't exist it should be skipped without causing an error
+           - Q: should there be both a "global_lookup_precedence" and a per-sls "sls_lookup_precedence_override"
+         #+END_EXAMPLE
+       - gdocs, doc-merge
+         #+BEGIN_EXAMPLE
+           Genesis-Matrix Recommended Infrastructure
+
+            - Component Overview
+              - zabbix - monitoring, incident mgmt, ops event source
+              - salt - orchestration, config mgmt
+              - consul - runtime config, service discovery
+              - rkt - container runtime
+              - kubernetes - container cluster logic layer
+              - glusterfs - simple featureful persistent storage
+              - bareos - backups
+              - (optional) openfire - chatops
+              - (optional) sysdig - diagnostic instrumentation
+            - Component Relationships
+              - salt ->(installs)=> rkt
+              - rkt ->(launches)=> kubernetes
+              - kubernetes->(manages)=> services w/i rkt containers
+              - salt-
+            - Component Requirements and Constraints
+              - Kubernetes 
+                - Version: 1.3 or greater is required for rkt containers support.
+                  - As of [2016-09-12] CentOS repos only package v1.2
+
+
+            - Undecided Components
+              - Secrets Management
+                - Candidates:
+                  - Vault
+              - Scalable Durable Database
+                - Candidates:
+                  - Percona
+                  - Galera
+                  - MariaDB Clustering
+              - Log Aggregation and Analysis
+                - Candidates:
+                  - ELK
+                  - Notables
+                    - https://github.com/mozilla/MozDef
+
+
+         #+END_EXAMPLE
+   - Questions
+   - log
 * chapters
 ** Introduction to Salt
 :PROPERTIES:
@@ -427,14 +511,15 @@
      - srcs
        #+NAME: 635D3FC2-512A-451C-B2DA-7BABD5AB3A9B-srcs
        #+CAPTION: reference list
-       | ! | title | url                                                                                   | desc | rowid   |
-       |   | title | url                                                                                   | desc | rowid   |
-       |---+-------+---------------------------------------------------------------------------------------+------+---------|
-       | / |       |                                                                                       |      | <7>     |
+       | ! | title | url                                                                                   | desc | rowid                                    |
+       |   | title | url                                                                                   | desc | rowid                                    |
+       |---+-------+---------------------------------------------------------------------------------------+------+------------------------------------------|
+       | / |       |                                                                                       |      | <7>                                      |
+       | # |       | https://github.com/saltstack/pepper                                                   |      | <<F66BE7D9-31D1-44BF-87E7-ECE938F5F258>> |
        | # |       | http://bencane.com/2014/07/17/integrating-saltstack-with-other-services-via-salt-api/ |      | <<FCDACFE3-C17D-4F5F-9022-FA2F415C139C>> |
        | # |       | http://www.thereluctanttecchie.com/salt_api_a_crash_course/                           |      | <<BC462FF1-7CD3-41FB-98C8-BAE02ED2BE89>> |
        | # |       | https://manned.org/salt-api/adedd5b3                                                  |      | <<53F3608D-B361-4E77-9A7E-6C092D4E92A3>> |
-       | # |       | https://coderwall.com/p/jcxcba/basic-usage-of-salt-api                                                                                      |      | <<733C0E12-5CC6-431D-BFAF-390503E8F7A0>> |
+       | # |       | https://coderwall.com/p/jcxcba/basic-usage-of-salt-api                                |      | <<733C0E12-5CC6-431D-BFAF-390503E8F7A0>> |
        #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
      - on Initial Understanding a/o Discovery
    - Questions
@@ -1336,91 +1421,6 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
        - (nb) perhaps this could be used to clone from templates and subsequently configured a/o customized via the console-oriented guest OS file manip
 
 ** on Salt Execution Flow (Pillar-Driven Walkthrough)
-* TODO 
-:PROPERTIES:
-:ID: 35A0C0C8-3E86-4DCE-B00B-37609B56A192
-:END:
-[2017-10-27 Fri 05:14]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-10-27}::1339][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-10-27}::1339]]
- - context ::
-   - [/] overview
-   - info/notes
-     - srcs
-       #+NAME: 35A0C0C8-3E86-4DCE-B00B-37609B56A192-srcs
-       #+CAPTION: reference list
-       |!|title|url|desc|rowid|
-       | |title|url|desc|rowid|
-       |-|-----|---|----|-----|
-       |/|     |   |    | <7> |
-       |#|     |   |    |     |
-       #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
-       - gdocs, doc-merge 
-         #+BEGIN_EXAMPLE
-           Salt Execution Flow (Pillar-driven Walkthrough)
-
-           - read top.sls (top.sls is pillar-based so all targeting and state assignment is via the pillar system)
-           - encounter pillar references in match specs (performing lookup using minion id to get sls_path)
-           - lookup list of states (assigned by minion id)
-           - provide ordered list of state_lst
-           - iterate over state_lst to get listing of per-minion state.sls_path
-           - with the list of per-minion states constructed, the states are sent/returned to the minion
-           - the minion will seek to compile the states into low_sls
-           - the states will seek to add contextual pillar data (as a dictionary) to a variable called "lookup" by quering pillar data using the state's sls_uuid
-           - the pillar will search for a dataset/dictionary at: "lookup:sls_uuid:{{ sls_uuid }}"
-           - there are potentially more than one lookup, but the sls_uuid lookup provides the default values for a state before any other context is examined
-           - the data here will contain the default values and a list of "lookup_overrides" that may be checked for merge/stack/include
-           - FYI: lookups after sls_uuid ("lookup_overrides") use pillarstack to merged on top of, replace or delete, the values in the default dictionary
-           - the "lookup_overrides" will be a list of attributes that may be searched on. For example, (where a "lookup_override" includes "G@id") to locate a minion-specific config, looks in the pillar at: "lookup:G@id:myminion:{{ sls_uuid }}"
-           - it should be possible to stack levels of specificity for each state according to a potential list of attribute-based overrides
-           - Q: should the list of overrides should be the same for all states, so that it doesn't need to be defined per-sls
-           - A: Yes. A standard list should be specified, and where a file doesn't exist it should be skipped without causing an error
-           - Q: should there be both a "global_lookup_precedence" and a per-sls "sls_lookup_precedence_override"
-         #+END_EXAMPLE
-       - gdocs, doc-merge
-         #+BEGIN_EXAMPLE
-           Genesis-Matrix Recommended Infrastructure
-
-            - Component Overview
-              - zabbix - monitoring, incident mgmt, ops event source
-              - salt - orchestration, config mgmt
-              - consul - runtime config, service discovery
-              - rkt - container runtime
-              - kubernetes - container cluster logic layer
-              - glusterfs - simple featureful persistent storage
-              - bareos - backups
-              - (optional) openfire - chatops
-              - (optional) sysdig - diagnostic instrumentation
-            - Component Relationships
-              - salt ->(installs)=> rkt
-              - rkt ->(launches)=> kubernetes
-              - kubernetes->(manages)=> services w/i rkt containers
-              - salt-
-            - Component Requirements and Constraints
-              - Kubernetes 
-                - Version: 1.3 or greater is required for rkt containers support.
-                  - As of [2016-09-12] CentOS repos only package v1.2
-
-
-            - Undecided Components
-              - Secrets Management
-                - Candidates:
-                  - Vault
-              - Scalable Durable Database
-                - Candidates:
-                  - Percona
-                  - Galera
-                  - MariaDB Clustering
-              - Log Aggregation and Analysis
-                - Candidates:
-                  - ELK
-                  - Notables
-                    - https://github.com/mozilla/MozDef
-
-
-         #+END_EXAMPLE
-   - Questions
-   - log
-
 ** on Requirements-Oriented Delivery a/ Testing
 :PROPERTIES:
 :ID: BE8C5B48-5630-4E9C-97B7-AA4F19143FC6
@@ -1800,3 +1800,42 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
          create_table: True
      #+END_EXAMPLE
    - with this config in place, the file is created when data is inserted so we'll demonstrate that now
+** on TDD w/ Salt Policy
+:PROPERTIES:
+:ID: 16A39CF7-762D-4CE8-9C6A-BC092EBF0529
+:END:
+[2018-12-20 Thu 05:30]
+[[git:~/.extrefs/paradigm/refs/ref-Salt.org::master@{2018-12-20}::1803][git:~/.extrefs/paradigm/refs/ref-Salt.org::master@{2018-12-20}::1803]]
+ - context ::
+   - [/] overview
+   - info/notes
+     - srcs
+       #+NAME: 16A39CF7-762D-4CE8-9C6A-BC092EBF0529-srcs
+       #+CAPTION: reference list
+       | ! | title | url                                        | desc | rowid                                    |
+       |   | title | url                                        | desc | rowid                                    |
+       |---+-------+--------------------------------------------+------+------------------------------------------|
+       | / |       |                                            |      | <7>                                      |
+       | # |       | https://github.com/saltstack/pytest-salt   |      | <<5D8C798F-8B7C-4E21-9D28-C5B9530ECDF2>> |
+       | # |       | https://github.com/saltstack/kitchen-salt/ |      | <<FB8A533C-8612-40FB-9AB7-ABC258BD95D6>> |
+       | # |       | https://github.com/saltstack/salt-testing  |      | <<D6426696-2F66-4565-A580-E50078E95ECD>> |
+       | # |       |                                            |      |                                          |
+       #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+   - Questions
+   - log
+ - procedure :: (wip) run =kitchen-salt= (on Debian)
+   - start and enter a Debian docker container
+     #+begin_src bash
+     docker run -it --run -v $(pwd):/app debian
+     #+end_src
+   - (opt.) clone a project that uses =kitchen-salt= and =cd= to that project directory
+   - add pre-req system packages
+     #+begin_src bash
+     apt update
+     apt install ruby ruby-dev ruby-ffi build-essential
+     #+end_src
+   - install pre-req ruby packages from =Gemfile=
+     #+begin_src bash
+     bundler install --path $(path)/.ruby/bundle
+     # gem install -g
+     #+end_src
