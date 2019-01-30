@@ -135,13 +135,33 @@
 :PROPERTIES:
 :ID:       F5223C98-8573-4B69-8043-A285F37C02BC
 :END:
- - context ::
-   - [0/0] overview
-     - use the distro package manager, else the upstream project's install package and instruction
-   - info/notes
- - procedure :: from the command line
-   - install software pre-requisites: git, vagrant, packer, gnu make
-     - (alt.) for Fedora 22+
+ - procedure :: for CentOSv7 using the KVM hypervisor (recommended)
+   - install software pre-requisites: git, make, kvm, vagrant
+     #+begin_src bash
+     sudo yum install git make qemu-kvm qemu libvirt libvirt-devel ruby-devel vagrant gcc jq 
+     #+end_src
+   - you may also want to install these, though they are not required
+     #+begin_src bash
+     sudo yum install virt-manager
+     #+end_src
+   - setup access to KVM
+   - install packer version 1.3.0 (or better)
+   - install Vagrant plugins
+     #+begin_src bash
+     echo vagrant-libvirt vagrant-hostmanager vagrant-sshfs | xargs -n1 vagrant plugin install && vagrant plugin update
+     #+end_src
+   - clone and enter the gema-ctl repo
+     #+BEGIN_SRC bash
+       git clone --recursive https://github.com/genesis-matrix/gema-ctl.git && cd gema-ctl
+     #+END_SRC
+   - launch a Salt Master
+     #+begin_src bash
+     make vagrant-into-salt-master-d1
+     #+end_src
+
+ - procedure :: (wip) Other Linux Platforms
+   - install requisites
+     - (alt.) for Fedora 22+ using VirtualBox
        #+BEGIN_SRC bash
        sudo dnf install -y git make jq unzip 
        # install vagrant
@@ -168,8 +188,7 @@
      #+BEGIN_SRC bash
        git clone --recursive https://github.com/genesis-matrix/gema-ctl.git && cd gema-ctl
      #+END_SRC
-   - 
- - procedure :: using snap package
+ - procedure :: (wip) using snap package
    - [2016-08-20 Sat] https://www.linuxbabe.com/desktop-linux/install-snap-packages-arch-linux-fedora-debian
      #+BEGIN_EXAMPLE
        Install snapd on Fedora 23/24
@@ -191,6 +210,7 @@
        SELINUX=permissive
        Save and close the file. Now you can start snapd service with systemctl.
      #+END_EXAMPLE
+ 
 ** (wip) howto, Initial GeMa Setup on Windows
  - procedure :: use =chocolately=
  - procedure :: (wip) use Windows Subsystem for Linux
