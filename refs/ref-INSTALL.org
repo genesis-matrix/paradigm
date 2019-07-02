@@ -145,6 +145,8 @@
      sudo yum install virt-manager
      #+end_src
    - setup access to KVM
+     - add your user account to the group libvirt
+       : sudo usermod -a -G libvirt $(whoami)
    - install packer version 1.3.0 (or better)
    - install Vagrant plugins
      #+begin_src bash
