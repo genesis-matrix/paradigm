@@ -69,14 +69,12 @@
          #+END_SRC
        - [2016-03-02 Wed 14:19]
          #+BEGIN_SRC bash :results drawer :wrap EXAMPLE
-         echo landrush vagrant-vmware-fusion | xargs -n1 vagrant plugin install
+         echo vagrant-vmware-fusion | xargs -n1 vagrant plugin install
          vagrant plugin license vagrant-vmware-fusion ~/.vault/cfgs/vagrant-central/vagrant-plugin-vmware-fusion-license
          #+END_SRC
 
          #+RESULTS:
          #+BEGIN_EXAMPLE
-         Installing the 'landrush' plugin. This can take a few minutes...
-         Installed the plugin 'landrush (1.2.0)'!
          Installing the 'vagrant-vmware-fusion' plugin. This can take a few minutes...
          Installed the plugin 'vagrant-vmware-fusion (4.0.22)'!
          Installing license for 'vagrant-vmware-fusion'...
@@ -190,6 +188,305 @@
    - (alt.) on MacOSX
      - clear specious port mapping entries from '[incomingtcp]' section of the [[/sudo:localhost:/Library/Preferences/VMware Fusion/vmnet8/nat.conf][/Library/Preferences/VMware Fusion/vmnet8/nat.conf]]
      - (wip) somehow related: [[/Library/Preferences/VMware fusion/networking]]
+
+** howto, Run Windows Guests in Linux/KVM
+- context ::
+  - info/notes
+    - srcs
+      - https://gitlab.com/genesis-matrix/gema-ctl/issues/136
+- procedure :: fix, distro-provided Vagrant doesn't include support for the =winrm= communicator used by Windows guests
+  - nb, Hashicorp-provided Vagrant packages include the =winrm= package out of the box
+  - when attempting to launch a VM, an error 
+    #+begin_example
+
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ VAGRANT_BASEBOX_IMAGE="peru/windows-server-2019-datacenter-x64-eval" vagrant up win19-qc-d1                                                                       
+Bringing machine 'win19-qc-d1' up with 'libvirt' provider...
+==> win19-qc-d1: Box 'peru/windows-server-2019-datacenter-x64-eval' could not be found. Attempting to find and install...
+win19-qc-d1: Box Provider: libvirt
+win19-qc-d1: Box Version: >= 0
+==> win19-qc-d1: Loading metadata for box 'peru/windows-server-2019-datacenter-x64-eval'
+win19-qc-d1: URL: https://vagrantcloud.com/peru/windows-server-2019-datacenter-x64-eval
+==> win19-qc-d1: Adding box 'peru/windows-server-2019-datacenter-x64-eval' (v20200206.01) for provider: libvirt
+win19-qc-d1: Downloading: https://vagrantcloud.com/peru/boxes/windows-server-2019-datacenter-x64-eval/versions/20200206.01/providers/libvirt.box
+win19-qc-d1: Download redirected to host: vagrantcloud-files-production.s3.amazonaws.com
+==> win19-qc-d1: Successfully added box 'peru/windows-server-2019-datacenter-x64-eval' (v20200206.01) for 'libvirt'!
+Traceback (most recent call last):
+46: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/batch_action.rb:82:in `block (2 levels) in run'
+45: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:194:in `action'
+44: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:194:in `call'
+43: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/environment.rb:614:in `lock'
+42: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:208:in `block in action'
+41: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:239:in `action_raw'
+40: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/runner.rb:66:in `run'
+39: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/util/busy.rb:19:in `busy'
+38: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/runner.rb:66:in `block in run'
+37: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/builder.rb:116:in `call'
+36: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+35: from /usr/share/rubygems-integration/all/gems/vagrant-sshfs-1.3.1/lib/vagrant-sshfs/action_hostpath_fixup.rb:102:in `call'
+34: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+33: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/builtin/config_validate.rb:25:in `call'
+32: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+31: from /usr/share/rubygems-integration/all/gems/vagrant-sshfs-1.3.1/lib/vagrant-sshfs/action_hostpath_fixup.rb:125:in `call'
+30: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+29: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/builtin/box_check_outdated.rb:31:in `call'
+28: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+27: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/builtin/call.rb:53:in `call'
+26: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/runner.rb:66:in `run'
+25: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/util/busy.rb:19:in `busy'
+24: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/runner.rb:66:in `block in run'
+23: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/builder.rb:116:in `call'
+22: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+21: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:95:in `block in finalize_action'
+20: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+19: from /usr/share/rubygems-integration/all/gems/vagrant-libvirt-0.0.45/lib/vagrant-libvirt/action/set_name_of_domain.rb:35:in `call'
+18: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+17: from /usr/share/rubygems-integration/all/gems/vagrant-libvirt-0.0.45/lib/vagrant-libvirt/action/handle_storage_pool.rb:57:in `call'
+16: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/warden.rb:34:in `call'
+15: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/action/builtin/handle_box.rb:48:in `call'
+14: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/vagrantfile.rb:81:in `machine'
+13: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/vagrantfile.rb:81:in `new'
+12: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:141:in `initialize'
+11: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:260:in `communicate'
+10: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/registry.rb:27:in `get'
+9: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/plugin.rb:15:in `block in <class:Plugin>'
+8: from /usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require'
+7: from /usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require'
+6: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/communicator.rb:6:in `<top (required)>'
+5: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/communicator.rb:6:in `require_relative'
+4: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/shell.rb:8:in `<top (required)>'
+3: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/util/silence_warnings.rb:8:in `silence!'
+2: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/shell.rb:9:in `block in <top (required)>'
+1: from /usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require'
+/usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require': cannot load such file -- winrm (LoadError)
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ 
+    #+end_example
+  - installing the gem using Vagrant didn't work for me
+    #+begin_example
+
+
+
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ vagrant plugin install winrm                                                                                                                                      
+Installing the 'winrm' plugin. This can take a few minutes...
+Bundler, the underlying system Vagrant uses to install plugins,
+reported an error. The error is shown below. These errors are usually
+caused by misconfigured plugin installations or transient network
+issues. The error from Bundler is:
+
+conflicting dependencies fog-core (~> 1.43.0) and fog-core (= 2.1.0)
+  Activated fog-core-2.1.0
+  which does not match conflicting dependency (~> 1.43.0)
+
+  Conflicting dependency chains:
+    fog-core (= 2.1.0), 2.1.0 activated
+
+  versus:
+    vagrant-libvirt (> 0), 0.0.41 activated, depends on
+    fog-core (~> 1.43.0)
+
+
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ vagrant plugin update
+Updating installed plugins...
+All plugins are up to date.
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ vagrant plugin list
+vagrant-hostmanager (1.8.9, system)
+vagrant-libvirt (0.0.45, system)
+vagrant-sshfs (1.3.1, system)
+    #+end_example
+  - checked for a repo-packaged solution, though didn't see one
+    #+begin_example
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ apt search winrm
+Sorting... Done
+Full Text Search... Done
+golang-github-dylanmei-winrmtest-dev/eoan,eoan 0.0~git20151226.0256178-2 all
+  testing addon for golang-github-masterzen-winrm
+
+golang-github-masterzen-winrm-dev/eoan,eoan 0.0~git20170601.0.1ca0ba6-3 all
+  Windows remote command execution library for Go
+
+golang-github-masterzen-xmlpath-dev/eoan,eoan 0.0~git20140218.13f4951-3 all
+  subset of the XPath specification for Go (deprecated)
+
+golang-github-packer-community-winrmcp-dev/eoan,eoan 0.0~git20170607.0.078cc0a-1 all
+  copy files to remote hosts using WinRM (Go library)
+
+python-txwinrm/eoan,eoan 1.3.3-1 all
+  asynchronous Python WinRM client libraries
+
+python3-winrm/eoan,eoan 0.3.0-2 all
+  Python 3 library for Windows Remote Management
+
+txwinrm/eoan,eoan 1.3.3-1 all
+  asynchronous Python WinRM client binaries
+
+winrmcp/eoan 0.0~git20170607.0.078cc0a-1 amd64
+  tool for copying files to remote Windows machines using WinRM
+
+    #+end_example
+  - though a more localized fix is preferred, installing the plugin global worked
+    #+begin_example
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ gem install -r winrm
+Fetching: erubi-1.9.0.gem (100%)
+ERROR:  While executing gem ... (Gem::FilePermissionError)
+    You don't have write permissions for the /var/lib/gems/2.5.0 directory.
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ sudo gem install -r winrm                                                                                                                                         
+[sudo] password for niklauz: 
+Fetching: erubi-1.9.0.gem (100%)
+Successfully installed erubi-1.9.0
+Fetching: gssapi-1.3.0.gem (100%)
+Successfully installed gssapi-1.3.0
+Fetching: gyoku-1.3.1.gem (100%)
+Successfully installed gyoku-1.3.1
+Fetching: httpclient-2.8.3.gem (100%)
+Successfully installed httpclient-2.8.3
+Fetching: little-plugger-1.1.4.gem (100%)
+Successfully installed little-plugger-1.1.4
+Fetching: logging-2.2.2.gem (100%)
+Successfully installed logging-2.2.2
+Fetching: nori-2.6.0.gem (100%)
+Successfully installed nori-2.6.0
+Fetching: rubyntlm-0.6.2.gem (100%)
+Successfully installed rubyntlm-0.6.2
+Fetching: winrm-2.3.4.gem (100%)
+Successfully installed winrm-2.3.4
+Parsing documentation for erubi-1.9.0
+Installing ri documentation for erubi-1.9.0
+Parsing documentation for gssapi-1.3.0
+Installing ri documentation for gssapi-1.3.0
+Parsing documentation for gyoku-1.3.1
+Installing ri documentation for gyoku-1.3.1
+Parsing documentation for httpclient-2.8.3
+Installing ri documentation for httpclient-2.8.3
+Parsing documentation for little-plugger-1.1.4
+Installing ri documentation for little-plugger-1.1.4
+Parsing documentation for logging-2.2.2
+Installing ri documentation for logging-2.2.2
+Parsing documentation for nori-2.6.0
+Installing ri documentation for nori-2.6.0
+Parsing documentation for rubyntlm-0.6.2
+Installing ri documentation for rubyntlm-0.6.2
+Parsing documentation for winrm-2.3.4
+Installing ri documentation for winrm-2.3.4
+Done installing documentation for erubi, gssapi, gyoku, httpclient, little-plugger, logging, nori, rubyntlm, winrm after 2 seconds
+9 gems installed
+niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ 
+  #+end_example
+  - even with the =winrm= gem installed, the =winrm-elevated= gem also needed to be installed similarly
+    #+begin_example
+    niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ VAGRANT_BASEBOX_IMAGE="peru/windows-server-2019-datacenter-x64-eval" make vagrant-prep-win19-qc-d1
+    ## vagrant-prep-win19-qc-d1 ##
+    Traceback (most recent call last):
+            23: from /usr/bin/vagrant:23:in `<main>'
+            22: from /usr/bin/vagrant:23:in `load'
+            21: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/bin/vagrant:177:in `<top (required)>'
+            20: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/environment.rb:291:in `cli'
+            19: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/cli.rb:58:in `execute'
+            18: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/commands/up/command.rb:87:in `execute'
+            17: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/plugin/v2/command.rb:186:in `with_target_vms'
+            16: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/plugin/v2/command.rb:186:in `each'
+            15: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/plugin/v2/command.rb:204:in `block in with_target_vms'
+            14: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/plugin/v2/command.rb:180:in `block in with_target_vms'
+            13: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/environment.rb:716:in `machine'
+            12: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/vagrantfile.rb:81:in `machine'
+            11: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/vagrantfile.rb:81:in `new'
+            10: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:141:in `initialize'
+             9: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/machine.rb:260:in `communicate'
+             8: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/lib/vagrant/registry.rb:27:in `get'
+             7: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/plugin.rb:15:in `block in <class:Plugin>'
+             6: from /usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require'
+             5: from /usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require'
+             4: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/communicator.rb:6:in `<top (required)>'
+             3: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/communicator.rb:6:in `require_relative'
+             2: from /usr/share/rubygems-integration/all/gems/vagrant-2.2.3/plugins/communicators/winrm/shell.rb:12:in `<top (required)>'
+             1: from /usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require'
+    /usr/lib/ruby/2.5.0/rubygems/core_ext/kernel_require.rb:59:in `require': cannot load such file -- winrm-elevated (LoadError)
+    make: *** [bin/vagrant-mod.mk:16: vagrant-prep-win19-qc-d1] Error 1
+    niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ vagrant plugin install winrm-elevated
+    Installing the 'winrm-elevated' plugin. This can take a few minutes...
+    Bundler, the underlying system Vagrant uses to install plugins,
+    reported an error. The error is shown below. These errors are usually
+    caused by misconfigured plugin installations or transient network
+    issues. The error from Bundler is:
+       
+    conflicting dependencies rubyzip (~> 2.0) and rubyzip (= 1.2.2)
+      Activated rubyzip-1.2.2
+      which does not match conflicting dependency (~> 2.0)
+       
+      Conflicting dependency chains:
+        rubyzip (= 1.2.2), 1.2.2 activated
+       
+      versus:
+        winrm-elevated (> 0), 1.2.0 activated, depends on
+        winrm-fs (~> 1.0), 1.3.4 activated, depends on
+        rubyzip (~> 2.0)
+       
+       
+    niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ gem install -r winrm-elevated
+    Fetching: rubyzip-2.2.0.gem (100%)
+    ERROR:  While executing gem ... (Gem::FilePermissionError)
+        You don't have write permissions for the /var/lib/gems/2.5.0 directory.
+    niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ sudo gem install -r winrm-elevated                                                                                                                                
+    [sudo] password for niklauz: 
+    Fetching: rubyzip-2.2.0.gem (100%)
+    Successfully installed rubyzip-2.2.0
+    Fetching: winrm-fs-1.3.4.gem (100%)
+    Successfully installed winrm-fs-1.3.4
+    Fetching: winrm-elevated-1.2.0.gem (100%)
+    Successfully installed winrm-elevated-1.2.0
+    Parsing documentation for rubyzip-2.2.0
+    Installing ri documentation for rubyzip-2.2.0
+    Parsing documentation for winrm-fs-1.3.4
+    Installing ri documentation for winrm-fs-1.3.4
+    Parsing documentation for winrm-elevated-1.2.0
+    Installing ri documentation for winrm-elevated-1.2.0
+    Done installing documentation for rubyzip, winrm-fs, winrm-elevated after 0 seconds
+    3 gems installed
+    niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ 
+    #+end_example
+  - (opt.) recommended, install RDP client =rdesktop=
+    #+begin_example
+      niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ sudo apt install rdesktop
+      [sudo] password for niklauz: 
+      Reading package lists... Done
+      Building dependency tree       
+      Reading state information... Done
+      The following additional packages will be installed:
+        libgssglue1
+      Suggested packages:
+        pcscd
+      The following NEW packages will be installed:
+        libgssglue1 rdesktop
+      0 upgraded, 2 newly installed, 0 to remove and 33 not upgraded.
+      Need to get 206 kB of archives.
+      After this operation, 641 kB of additional disk space will be used.
+      Do you want to continue? [Y/n] 
+      Get:1 http://us.archive.ubuntu.com/ubuntu eoan/universe amd64 libgssglue1 amd64 0.4-2ubuntu2 [19.7 kB]
+      Get:2 http://us.archive.ubuntu.com/ubuntu eoan/universe amd64 rdesktop amd64 1.8.6-2build1 [186 kB]
+      Fetched 206 kB in 0s (626 kB/s)   
+      Selecting previously unselected package libgssglue1:amd64.
+      (Reading database ... 204809 files and directories currently installed.)
+      Preparing to unpack .../libgssglue1_0.4-2ubuntu2_amd64.deb ...
+      Unpacking libgssglue1:amd64 (0.4-2ubuntu2) ..................................................................................................................................................................] 
+      Selecting previously unselected package rdesktop.##########..................................................................................................................................................] 
+      Preparing to unpack .../rdesktop_1.8.6-2build1_amd64.deb ...
+      Unpacking rdesktop (1.8.6-2build1) ...##########################################.............................................................................................................................] 
+      Setting up libgssglue1:amd64 (0.4-2ubuntu2) ...######################################################........................................................................................................] 
+      Setting up rdesktop (1.8.6-2build1) ...#######################################################################################################...............................................................] 
+      Processing triggers for man-db (2.8.7-3) ...############################################################################################################################################.....................] 
+      Processing triggers for libc-bin (2.30-0ubuntu2) ...
+      niklauz@hawat:~/.vault/uris/gema-ctl.upstream$ 
+    #+end_example
+
+- procedure :: install Salt Minion on Windows (via Vagrant)
+  - nb
+    - https://blog.jourdant.me/post/3-ways-to-download-files-with-powershell
+    - https://stackoverflow.com/questions/13876138/how-to-evaluate-powershell-script-inputed-from-stdin
+  - via Powershell
+    #+begin_src powershell
+      Invoke-WebRequest -Uri "https://raw.githubusercontent.com/saltstack/salt-bootstrap/develop/bootstrap-salt.ps1" -OutFile bootstrap-salt.ps1
+      bootstrap-salt.ps1
+    #+end_src
+  - via 
+
 ** info, Vagrant Manager
 :PROPERTIES:
 :ID: 356594C4-EDC9-453A-83EE-9C41E65D80CE
