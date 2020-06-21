@@ -1,0 +1,8 @@
+# -*- mode: org -*-
+#+SETUPFILE: ~/.vault/cfgs/emacs/apps/org/org-setupfile
+* TODO tasklist-gema.paradigm
+** Misc-Overhead
+*** misc meeting a/o correspondence
+*** work record maintenance
+*** work tool maintenance
+*** Administrative/Policy Prep/Compliance

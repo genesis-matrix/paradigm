@@ -11,7 +11,7 @@
 :ID: 909D8405-A986-42F3-B1D7-A3B9EC4F80E4
 :END:
 [2017-10-29 Sun 23:47]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-29}::10][git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-29}::10]]
+
  - context ::
    - [/] overview
    - info/notes
@@ -59,7 +59,7 @@
        #+END_SRC
 
        #+RESULTS:
-       [[file:./media/viz-GeMa-BaseBox-Build-Process-from-a-Workflow-View.png]]
+       [[file:./export/viz-GeMa-BaseBox-Build-Process-from-a-Workflow-View.png]]
 
      - on GeMa BaseBox Build Process from a Systems View
        #+BEGIN_SRC dot :file ./media/viz-GeMa-BaseBox-Build-Process-from-a-Systems-View.png
@@ -94,14 +94,14 @@
     #+END_SRC
 
     #+RESULTS:
-    [[file:./media/viz-GeMa-BaseBox-Build-Process-from-a-Systems-View.png]]
+    [[file:./export/viz-GeMa-BaseBox-Build-Process-from-a-Systems-View.png]]
 
 ** Paradigm Activities Guidance for Base Workflow
 :PROPERTIES:
 :ID: CB66CC83-E4A1-458E-A72F-7298D9665C45
 :END:
 [2017-10-30 Mon 01:56]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-30}::99][git:~/.vault/uris/gema-ctl/usr/doc/ref-GeMa.org::next@{2017-10-30}::99]]
+
  - context ::
    - [/] overview
    - info/notes

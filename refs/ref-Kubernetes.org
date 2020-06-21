@@ -11,7 +11,7 @@
 :LOGBOOK:
 :END:
 [2016-11-22 Tue 17:12]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Kubernetes.org::master@{2016-11-22}::8][git:~/.vault/uris/gema-ctl/usr/doc/ref-Kubernetes.org::master@{2016-11-22}::8]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -48,4 +48,4 @@
 ** secrets                                                        :noexport:
 ** bibliography
 ** footnotes
-[fn:0] simple example of a footnote, delete at your leisure
+

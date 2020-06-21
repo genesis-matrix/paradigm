@@ -151,7 +151,7 @@
 :LOGBOOK:
 :END:
 [2017-06-24 Sat 12:01]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Vagrant.org::next@{2017-06-24}::112][git:~/.vault/uris/gema-ctl/usr/doc/ref-Vagrant.org::next@{2017-06-24}::112]]
+
  - context :
    - [0/0] overview
    - info/notes
@@ -492,7 +492,7 @@ niklauz@hawat:~/.vault/uris/gema-ctl.upstream$
 :ID: 356594C4-EDC9-453A-83EE-9C41E65D80CE
 :END:
 [2017-10-22 Sun 11:02]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Vagrant.org::next@{2017-10-22}::190][git:~/.vault/uris/gema-ctl/usr/doc/ref-Vagrant.org::next@{2017-10-22}::190]]
+
  - context ::
    - [/] overview
    - info/notes

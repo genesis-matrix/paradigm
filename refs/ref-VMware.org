@@ -11,7 +11,7 @@
 :ID: 8ADA316B-81BF-4A19-B0DC-9A0D2F3170A8
 :END:
 [2016-06-20 Mon 14:14]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-VMware.org::master@{2016-06-20}::13][git:~/.vault/uris/gema-ctl/usr/doc/ref-VMware.org::master@{2016-06-20}::13]]
+
  - context ::
    - [/] overview
    - info/notes

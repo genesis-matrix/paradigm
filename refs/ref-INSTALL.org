@@ -125,7 +125,7 @@
    - Using a package manager is recommended where possible. Linux has =apt= and =yum=, Windows has =choco=, and MacOSX has =brew=.
    - Due to work/life circumstances, work and testing on GeMa takes place mostly with VMware Fusion on MacOSX.
    - While not presently tested on Windows and Linux, support for those platforms is considered highly desirable, and may be feasible with some expert effort.
- - for MacOSX instructions, see [[file:usr/doc/ref-INSTALL.org][Initial GeMa Setup on MacOSX]]
+ - for MacOSX instructions, see [[id:931F5DDD-FB89-4FE8-9203-DB63F78E654F][Initial GeMa Setup on MacOSX]]
 
 ** (wip) howto, install GeMa using =salt-minion=
  - install the =salt-minion= (various methods available)

@@ -12,7 +12,7 @@
 :LOGBOOK:
 :END:
 [2016-10-25 Tue 18:12]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Git.org::master@{2016-10-25}::8][git:~/.vault/uris/gema-ctl/usr/doc/ref-Git.org::master@{2016-10-25}::8]]
+
  - context ::
    - [0/0] overview
    - info/notes

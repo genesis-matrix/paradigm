@@ -85,7 +85,7 @@
      #+END_SRC
 
      #+RESULTS:
-     [[file:./media/viz-gema-role-relationships.png]]
+     [[file:./.artifacts/export/viz-gema-role-relationships.png]]
    - PM
      - maintains a library of customer interests/desires and organizes requests according to: resource type, customer, prokect, etc
      - maintains a fully history of the evolution of business requests
@@ -215,7 +215,7 @@
    #+END_SRC
 
    #+RESULTS[04b54a9302aa26d7d55609aed34a7b8e8ff46100]:
-   [[file:./media/viz-policy-workflow-layer-stage-release.png]]
+   [[file:./.artifacts/export/viz-policy-workflow-layer-stage-release.png]]
 
    - Baseline, aka base or master
      - rigorously high-quality, "live" policy

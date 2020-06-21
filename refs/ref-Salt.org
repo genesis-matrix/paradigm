@@ -8,7 +8,7 @@
 :ID: 35A0C0C8-3E86-4DCE-B00B-37609B56A192
 :END:
 [2017-10-27 Fri 05:14]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-10-27}::1339][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-10-27}::1339]]
+
  - context ::
    - [/] overview
    - info/notes
@@ -119,7 +119,7 @@
 :LOGBOOK:
 :END:
 [2015-10-28 Wed 00:34]
-[[git:~/.extrefs/gema-ctl/ReadMe.org::master@{2015-10-28}::626][git:~/.extrefs/gema-ctl/ReadMe.org::master@{2015-10-28}::626]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -151,7 +151,7 @@
 :ID: 42040B3C-901B-4478-B7B1-6F83836623FD
 :END:
 [2016-03-19 Sat 20:17]
-[[git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-19}::854][git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-19}::854]]
+
  - context ::
    - [/] overview
    - info/notes
@@ -172,7 +172,7 @@
 :ID: 1E0AE445-76DD-4510-9997-A1EB91092F23
 :END:
 [2016-03-10 Thu 19:18]
-[[git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-10}::1190][git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-10}::1190]]
+
  - context ::
    - [0/1] overview
      - [ ] connect to git sls, plr, cfg and pki repos for config
@@ -216,7 +216,7 @@
 :LOGBOOK:
 :END:
 [2016-06-20 Mon 16:55]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-06-20}::145][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-06-20}::145]]
+
  - context ::
    - [/] overview
    - info/notes
@@ -336,9 +336,9 @@
 *** info, Salt SSH
 :PROPERTIES:
 :ID:       7ba1e552-16dc-463b-9838-13b7132cd45b
-:session: 7ba1e552-16dc-463b-9838-13b7132cd45b-session
-:dir: /salt:
-:results: drawer
+:header-args: :session 7ba1e552-16dc-463b-9838-13b7132cd45b-session
+:header-args: :dir "/salt:"
+:header-args: :results drawer
 :END:
  - context ::
    - [/] overview
@@ -362,7 +362,7 @@
        - The 'Jinja search path' displays a list of paths that are
 	 checked for states. As is presently ([2014-07-28 Mon])
 	 configured it only includes
-	 [[./var/cachesalt/master/files/base]] but should also
+	 [[./var/cache/salt/master/files/base]] but should also
 	 include [[./srv/salt/roots/file/base]] et. al.
        - Q: could it be that salt-ssh needs salt to be installed
      - Q: how to resolve 'ERROR: sudo is configure with requiretty'
@@ -504,7 +504,7 @@
 :LOGBOOK:
 :END:
 [2016-02-18 Thu 15:19]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-02-18}::9][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-02-18}::9]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -548,7 +548,7 @@
 :ID: F71FCF5C-B465-4BAC-80C0-A892A928FFB9
 :END:
 [2016-03-19 Sat 20:24]
-[[git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-19}::1374][git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-19}::1374]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -598,7 +598,7 @@
 CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :END:
 [2016-05-30 Mon 15:51]
-[[git:~/.vault/uris/gema-ctl-core/usr/doc/ref-Salt.org::master@{2016-05-30}::501][git:~/.vault/uris/gema-ctl-core/usr/doc/ref-Salt.org::master@{2016-05-30}::501]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -625,7 +625,7 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :ID: 242EFE27-753E-4A43-AF39-05880846059F
 :END:
 [2016-03-12 Sat 19:41]
-[[git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-12}::878][git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-12}::878]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -764,7 +764,7 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :ID: 41C783DD-358D-4B0A-81F5-5785F2C3A322
 :END:
 [2016-03-19 Sat 20:22]
-[[git:~/.vault/uris/gema-ctl/ReadMe-GeMa.org::master@{2016-03-19}::1374][git:~/.vault/uris/gema-ctl/ReadMe-Gema.org::master@{2016-03-19}::1374]]
+
  - context ::
    - [0/0] overview
      - the pillar is a simple 1-pass compiled data store, w/o recursion or reference filling
@@ -1428,7 +1428,7 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :LOGBOOK:
 :END:
 [2016-10-22 Sat 16:37]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-10-22}::1287][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-10-22}::1287]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -1519,7 +1519,7 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :LOGBOOK:
 :END:
 [2016-10-23 Sun 22:35]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-10-23}::1354][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-10-23}::1354]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -1553,7 +1553,7 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :LOGBOOK:
 :END:
 [2016-10-23 Sun 04:08]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-10-23}::1354][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::master@{2016-10-23}::1354]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -1646,7 +1646,7 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :ID: 5E0B596E-CEA6-4DDF-8DDF-A20C1CDD3A9B
 :END:
 [2017-06-30 Fri 22:04]
-[[git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-06-30}::1509][git:~/.vault/uris/gema-ctl/usr/doc/ref-Salt.org::next@{2017-06-30}::1509]]
+
  - context ::
    - [0/0] overview
    - info/notes
@@ -1805,7 +1805,7 @@ CLOCK: [2016-05-30 Mon 15:51]--[2016-05-30 Mon 15:52] =>  0:01
 :ID: 16A39CF7-762D-4CE8-9C6A-BC092EBF0529
 :END:
 [2018-12-20 Thu 05:30]
-[[git:~/.extrefs/paradigm/refs/ref-Salt.org::master@{2018-12-20}::1803][git:~/.extrefs/paradigm/refs/ref-Salt.org::master@{2018-12-20}::1803]]
+
  - context ::
    - [/] overview
    - info/notes

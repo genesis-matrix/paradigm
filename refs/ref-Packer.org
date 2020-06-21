@@ -15,7 +15,6 @@
    - [0/0] overview
    - info/notes
      - srcs
-       #+NAME: 6AE5E09F-5137-4582-B20B-2A9ACEC58004-srcs
        #+CAPTION: reference list
        | ! | title                   | url                                                 | desc | rowid   |
        |   | title                   | url                                                 | desc | rowid   |
