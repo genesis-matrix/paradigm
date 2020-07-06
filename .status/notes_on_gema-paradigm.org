@@ -1,0 +1,585 @@
+# -*- mode: org -*-
+#+SETUPFILE: ~/.vault/cfgs/emacs/apps/org/org-setupfile
+#+TITLE: notes on GeMa // Paradigm
+#+FILETAGS: proj_gema
+
+* synopsis
+* advisement
+* TODO tasklist
+:PROPERTIES:
+:ID:       b916f923-f592-4626-ac25-e0a75c39500d
+:END:
+** doc-merge
+** Misc-Overhead
+*** misc meeting a/o correspondence
+*** work record maintenance
+*** work tool maintenance
+*** Administrative/Policy Prep/Compliance
+* chapters
+:PROPERTIES:
+:ID:       c2d45749-3739-410e-b456-88c751e7fe19
+:END:
+** Introduction to GeMa Paradigm
+:PROPERTIES:
+:ID: 693c60c1-f4aa-4e3b-9c14-c8399ace5e27
+:END:
+[2020-07-11 Sat 13:54]
+[[id:90dc9bd4-3d10-4d88-bb61-361cc0f516ea][Introduction to GeMa Paradigm]]
+- context ::
+  - [0/0] overview
+  - info/notes
+    - srcs
+      #+NAME: 693c60c1-f4aa-4e3b-9c14-c8399ace5e27-srcs
+      #+CAPTION: reference list
+      |!|title|url|desc|rowid|
+      | |title|url|desc|rowid|
+      |-|-----|---|----|-----|
+      |/|     |   |    | <7> |
+      |#|     |   |    |     |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+
+    - on Principle, Policy, and Practice
+      |  i | maturity | principle | policy                                                                                                                                                                                                                                               | practice | topic                                                                                                                                                                                                                                                                                 | rationale | rigor | audience                                                                                                         | quote | references |
+      |----+----------+-----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+-------+------------------------------------------------------------------------------------------------------------------+-------+------------|
+      |  1 |          |           | use double-quoted UUID for stanza IDs                                                                                                                                                                                                                |          | this way each stanza can be traced from high data to low chunk data, and stanza execution can be audited over time and tracked across devices, (2) also this helps to clarify the true source of a stanza in the midst of potentially complex inheritance and include SLS composition |           |       |                                                                                                                  |       |            |
+      |  2 |          |           | the stanza ID UUIDs should be quoted, iteration variables should be added to maintain unique stanza ID                                                                                                                                               |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |  3 |          |           | when blending variables into a stanza ID, use the form "<UUID>--?variable_name={{ variable_value }}", multiple variables may be chained                                                                                                              |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |  4 |          |           | break each SLS into the smallest possible peices                                                                                                                                                                                                     |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |  5 |          |           | link the most common local SLS combinations using includes in the init.sls                                                                                                                                                                           |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |  6 |          |           | maintain a '_META' document of commented YAML in each SLS describing: Applicability, Purpose, and Assumption/Pre-Requisites                                                                                                                          |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |  7 |          |           | the SLS '_META' section provides guidance to human policy-designers                                                                                                                                                                                  |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |  8 |          |           | the SLS '_META' section provide instruction to support automated safety handling                                                                                                                                                                     |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |  9 |          |           | favor SLS clarity, safety and concise-ness in that order.                                                                                                                                                                                            |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 10 |          |           | Perfection should not be needed.                                                                                                                                                                                                                     |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 11 |          |           | Favor modularizing and composition of SLS over all-in-one "completeness".                                                                                                                                                                            |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 12 |          |           | each SLS's documentation should seek to address/explain any of the reader's contextually reasonable conceptions, expectations, or assumptions                                                                                                        |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 13 |          |           | Under 'Assumptions', document what is done, what is not done, and any violations of the principle of least surprise                                                                                                                                  |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 14 |          |           | Avoid where possible, and where approrpiate explain, any implementation details that make casual assumptions less effective or correct                                                                                                               |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 15 |          |           |                                                                                                                                                                                                                                                      |          |                                                                                                                                                                                                                                                                                       |           |       | the most effective communication is a correct assumption                                                         |       |            |
+      | 16 |          |           | Dont Repeat Yourself (DRY)                                                                                                                                                                                                                           |          |                                                                                                                                                                                                                                                                                       |           |       | the significant up-front costs of CM should be offset over time by the inexpensive re-usability of existing work |       |            |
+      | 17 |          |           | SLS should exist as a blend between user documentation, machine instruction, and a "self-executing" audits                                                                                                                                           |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 18 |          |           | any variables that need to be exported, published or externalized from an SLS should be moved to a map.jinja file                                                                                                                                    |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 19 |          |           | state SLS should never include each other, includes may only exist in './init.sls' files or '_spec/*' files                                                                                                                                          |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 20 | WIP      |           | there are other ways to include SLS, such as with jinja imports, there is no guidance on this technique at present but it's considered an "advanced" technique                                                                                       |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 21 |          |           | within the state tree './init.sls' files are used to bind together discrete directory-local SLS, via 'include', to accomodate expectations about a comprehensive config                                                                              |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 22 |          |           | as a convenience, if an SLS directory doesnt have use for the 'includes' from an './init.sls', the './init.sls' may instead be created as a symlink to the dir-local SLS as a convenience                                                            |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 23 |          |           | remove distractions that may mislead or distract the human reader                                                                                                                                                                                    |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 24 |          |           | decompose the content of SLS into seperate SLS until each SLS can unobtrusively assessed for purpose, safety, and consequence by a non-Salt-expert                                                                                                   |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 25 |          |           | variable-ize data                                                                                                                                                                                                                                    |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 26 |          |           | use the SLS template and follow the style-guide.                                                                                                                                                                                                     |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 27 |          |           | the '_META' section and the staza prefaces should be written to the designer audience. The 'JINJA' section, the 'notes' stanzas, and the line comments are for implementers.                                                                         |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 28 |          |           | the SLS file's path should be considered as part of the communicated context in the name, so the name need only be clear within it's context                                                                                                         |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 29 |          |           | variables may be prefixed with their usage type                                                                                                                                                                                                      |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 30 |          |           | variables should be suffixed with their data type                                                                                                                                                                                                    |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 31 |          |           | as much as possible, Jinja logic should be contained to the 'JINJA' section                                                                                                                                                                          |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 32 |          |           | SLS variable imports should exist in overriding tiers, first sane file-local defaults, then external overrides (from pillar)                                                                                                                         |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 33 |          |           | document your assumptions, and the limits of your knowledge/understanding/awareness                                                                                                                                                                  |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 34 |          |           | variable naming convention: "_discard" indicates an assignment operation performed for side-effect                                                                                                                                                   |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 35 |          |           | variable naming convention: "dflt_<variable-name>" the default value for variable <variable-name>                                                                                                                                                    |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 36 |          |           | variable naming convention: "uri_*" indicates a uniform resource indicator, a path/reference to something                                                                                                                                            |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 37 |          |           | variable naming convention: "tmp_*" indicates a temporary use variable                                                                                                                                                                               |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 38 |          |           | variable naming convention: "*_str" for string datatype, "*_dct" for dictionary/mapping datatype, "*_lst" for list/sequence datatype                                                                                                                 |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 39 |          |           | favor snake-case variable names over camel-case variable names                                                                                                                                                                                       |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 40 |          |           | favor contextually-clarifying, and descriptive variable names                                                                                                                                                                                        |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 41 |          |           | for SLS top-level variables, favor a small number of variables. favor nested dictionary variables that models real-world objects (where possible)                                                                                                    |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 42 |          |           | optionally add brief explanitory statements to the '#' about the purpose of each stanza, intended to aid the implementer                                                                                                                             |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 43 |          |           | add a '#' line comment explaining the purpose of each requisite statement                                                                                                                                                                            |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 44 |          |           | use the new style state YAML, (w/ "module.function:"), dont use the old-style state YAML (w/ "module:\n    function:")                                                                                                                               |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 45 |          |           | when declaring relationships between stanzas try to annotate the UUID references with human-language references                                                                                                                                      |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 46 |          |           | implementer caution: when declaring relationships to stanzas created from iteration, the relatinoship references must still match the UUID exactly, to accomplish this consider looping to create stanza IDs using the same iteration variables list |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 47 |          |           | there is no "local" scope for jinja variables, however using a "tmp_*" prefix is sometimes still useful to communciate the intention that a variable be of limited relevance                                                                         |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 48 |          |           | even the related component SLS of a single task/purpose should be discrete, additive, incremental                                                                                                                                                    |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 49 |          |           | SLS re-usability is how config-mgmt pays for itself                                                                                                                                                                                                  |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 50 |          |           | as with pure functional programming, evaluation side-effects should be avoid in all cases, this requires thoughful use of Jinja                                                                                                                      |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 51 |          |           |                                                                                                                                                                                                                                                      |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 52 |          |           | safety and idempotency are required for composability, DRY composability is required for re-usability                                                                                                                                                |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 53 |          |           | where possible, the character length of SLS lines should be constrained to less than 80 characters                                                                                                                                                   |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      | 54 |          |           | where possible, the line count of SLS files should be constrained to less than                                                                                                                                                                       |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |    |          |           |                                                                                                                                                                                                                                                      |          |                                                                                                                                                                                                                                                                                       |           |       |                                                                                                                  |       |            |
+      |----+----------+-----------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------+-------+------------------------------------------------------------------------------------------------------------------+-------+------------|
+
+    - on Collected Anecdotes
+      - inspect "taste" the data to make sure you understand the shape and operate on the correct element. Not all assumption are safe.
+      - employ =unless= and =creates= state clauses as simple guards to make states safer
+      - there are levels of rigorous correctness in state-craft,
+      - understand, appreciate, and communicate the expected use of a solution. A solution can always be adapted if needed, and this is a beautiful thing but not every one-off solution needs to be bullet-proof.
+      - using the appropriate rigor in state-craft is virtuous because productivity is virtuous
+      - using the highest rigor when the lowest rigor is appropriate may not be virtuous because it may not be productive
+      - sustained practice in rigorous state-craft over time greatly lowers the difficulty of applying rigor, such that it's productive to apply rigor to increasingly trivial solutions, (DONT EXPECT THIS FROM LEARNERS!)
+      - a casual solution, (perhaps something in Vestibule), that becomes more broadly useful should be "promoted" in a way that denotes a higher expectation of rigor. This can be a fork and doesn't necessarily even need to change the original at all.
+      - promoting a casual or individual solution to a team solution, or a team solution into the a "base" sls module should be a shared decision. It involves renegociating risk exposure and risk migitation, so the shared costs and shared benefits should always be clear to those involved. These are decisions of shared 
+      - there's nothing implicitly wrong or unvirtuous w/ shelling-out, it's just typically harder to test and less portable, this should be understood and appreciated (in some cases as technical debt) but this is normal and certainly not disqualifying for a well-organized team 
+      - when using the =pkg.uptodate= state, the value of the =name= clause is still required, but it's not used for anything. This seems to operate differently between SLS and the CLI but remember that a value for =name= is always required, it's just that if you omit the name argument in SLS the function uses the SLS's ID value, but this doesn't happen on the command line. A value is required, but most any value, including an empty string ("") is accepted.
+
+  - Questions
+  - log
+
+** info, GeMa Convention for SLS Files
+:PROPERTIES:
+:ID: 66c6c86d-e551-4ee9-9e73-3cd7726e9c2d
+:END:
+[2020-07-11 Sat 16:54]
+[[id:c2d45749-3739-410e-b456-88c751e7fe19][chapters]]
+- context ::
+  - [0/0] overview
+  - info/notes
+    - srcs
+      #+NAME: 66c6c86d-e551-4ee9-9e73-3cd7726e9c2d-srcs
+      #+CAPTION: reference list
+      |!|title|url|desc|rowid|
+      | |title|url|desc|rowid|
+      |-|-----|---|----|-----|
+      |/|     |   |    | <7> |
+      |#|     |   |    |     |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+    - on Initial Understanding a/o Discovery
+      - 
+    - on the GeMa Convention for SLS Files
+      - This is one area of the GeMa paradigm that isn't fully landed, but I can offer some additional insight to the design goals and trade offs involved.
+      - I expect this area will eventually be rigorously define by GeMa paradigm.
+      - By way of explanation, you'll sometime see me favor a small number of nested variables in an SLS. This serves to organize data along more than one dimension, (structure, in addition to purpose), and to limit the number of top-level objects to track in the SLS namespace.
+      - Consider for example, that you're inheriting responsibility for a large collection of states from someone. If there is a single variable that serves as an entrypoint for the data significant to each SLS then you can know where to start to more easily discover what data is provided, and how the parts of that data might correlate to each other ... all without having to have a list of the variables in context.
+      - There's also the possibility that some data operations could be automated, or further templatized by starting with a pre-established common name.
+      - Example
+        #+begin_example
+
+       ## </JINJA>
+
+     ​
+
+
+	   ##_META:
+
+	   ##  purpose:
+
+	   ##    - lamp spec
+
+	   ##  applicability:
+
+	   ##    - desc: Tested on CentOS7
+
+	   ##    - assumptions:
+
+
+	       A targetspec (compound targeting) would be supplied to make the applicability explicitly and testable, for humans and machines.
+
+		   Create task
+		   01 Sep 2017
+		   create a targetspec (compound targeting) match to express applicability in an explicit and testable way
+
+	   ##      - salt-minion up to date and restarted prior
+
+	   ##
+
+
+	   ## <JINJA>
+
+	   {% set var_lst = [
+
+	     'orange',
+
+	     'banana',
+
+	     'apple'
+
+	     ]
+
+	   %}
+        #+end_example
+      - Preamble block
+              #+begin_example
+      ##
+      ##
+      ##
+              #+end_example
+        - (3 empty lines)
+        - _META block
+          - block open-tag
+            #+begin_example
+  ##_META
+            #+end_example
+          - block close-tag, the block is closed by the first non
+            #+begin_example
+  ##
+            #+end_example
+        - (3 empty lines)
+        - JINJA block
+          - block open-tag
+            #+begin_example
+    ## <JINJA>
+            #+end_example
+          - block close-tag
+            #+begin_example
+  ## </JINJA>
+            #+end_example
+        
+        - (3 empty lines)
+        - one or more state stanzas, each with a descriptive comment in the preceeding line, prefixed with a '#', each stanza separated by 3 empty lines
+      - (3 empty lines)
+      - EOF line
+        #+begin_example
+## EOF
+        #+end_example
+      - (1 empty line)
+
+    - on the =var_dct= Variable
+      - Variable naming is often caught triangulating among two or more ideals.
+      - You could make this variable more descriptively named and shed the generic name of "var".
+      - Using a =var_dct=, with a terse descriptive name.
+
+  - Questions
+  - log
+
+** info, Using the SLS _META Block
+:PROPERTIES:
+:ID: f64193d2-1358-48c1-9810-f752dc6540e1
+:END:
+[2020-07-11 Sat 17:10]
+[[id:66c6c86d-e551-4ee9-9e73-3cd7726e9c2d][info, GeMa Convention for SLS Files]]
+- context ::
+  - [/] overview
+  - info/notes
+    - srcs
+      #+NAME: f64193d2-1358-48c1-9810-f752dc6540e1-srcs
+      #+CAPTION: reference list
+      |!|title|url|desc|rowid|
+      | |title|url|desc|rowid|
+      |-|-----|---|----|-----|
+      |/|     |   |    | <7> |
+      |#|     |   |    |     |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+    - on Initial Understanding a/o Discovery
+      - example
+        #+begin_src salt
+###
+        #+end_src
+
+  - Questions
+  - log
+
+** info, Using the SLS Jinja Block
+:PROPERTIES:
+:ID: 787b3e5c-af34-49af-bc51-f9ced2281878
+:END:
+[2020-07-11 Sat 17:20]
+
+- context ::
+  - [/] overview
+  - info/notes
+    - srcs
+      #+NAME: 787b3e5c-af34-49af-bc51-f9ced2281878-srcs
+      #+CAPTION: reference list
+      |!|title|url|desc|rowid|
+      | |title|url|desc|rowid|
+      |-|-----|---|----|-----|
+      |/|     |   |    | <7> |
+      |#|     |   |    |     |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+  - Questions
+  - log
+
+** info, Using the =var_dct= Variable
+:PROPERTIES:
+:ID: d47ba77e-1f7d-4053-8287-a09fe23c06bd
+:END:
+[2020-07-11 Sat 17:15]
+[[id:f64193d2-1358-48c1-9810-f752dc6540e1][info, Using the SLS _META Block]]
+- context ::
+  - [/] overview
+  - info/notes
+    - srcs
+      #+NAME: d47ba77e-1f7d-4053-8287-a09fe23c06bd-srcs
+      #+CAPTION: reference list
+      |!|title|url|desc|rowid|
+      | |title|url|desc|rowid|
+      |-|-----|---|----|-----|
+      |/|     |   |    | <7> |
+      |#|     |   |    |     |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+  - Questions
+  - log
+
+** info, GeMa Convention for Map.Jinja Files
+:PROPERTIES:
+:ID: 8526014c-97eb-41c1-bf5d-3cba02d2694b
+:END:
+[2020-07-11 Sat 17:17]
+[[id:d47ba77e-1f7d-4053-8287-a09fe23c06bd][info, Using the =var_dct= Variable]]
+- context ::
+  - [/] overview
+  - info/notes
+    - srcs
+      #+NAME: 8526014c-97eb-41c1-bf5d-3cba02d2694b-srcs
+      #+CAPTION: reference list
+      |!|title|url|desc|rowid|
+      | |title|url|desc|rowid|
+      |-|-----|---|----|-----|
+      |/|     |   |    | <7> |
+      |#|     |   |    |     |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+  - Questions
+  - log
+
+** howto, Using GeMa Pillar
+:PROPERTIES:
+:ID: 6f76aeff-05a1-4a99-b718-26d54d9b0561
+:END:
+[2020-07-11 Sat 17:25]
+[[id:8526014c-97eb-41c1-bf5d-3cba02d2694b][info, GeMa Convention for Map.Jinja Files]]
+- context ::
+  - [/] overview
+  - info/notes
+    - srcs
+      #+NAME: 6f76aeff-05a1-4a99-b718-26d54d9b0561-srcs
+      #+CAPTION: reference list
+      |!|title|url|desc|rowid|
+      | |title|url|desc|rowid|
+      |-|-----|---|----|-----|
+      |/|     |   |    | <7> |
+      |#|     |   |    |     |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+  - Questions
+  - log
+
+* extrefs
+** reports
+*** clock summary this day
+   #+BEGIN: clocktable :maxlevel 4 :scope file :block today :emphasize :link
+   #+END:
+*** clock summary recent weeks
+   #+BEGIN: clocktable :scope file :maxlevel 4 :tstart "<-2w>" :tend "<now>" :step day :stepskip0 :emphasize :link
+   #+END:
+*** todo tasks status report
+   #+BEGIN:  columnview :id '(use ID from TODO properties) :skip-empty-rows t :maxlevel 3 :hlines 2 :vlines nil
+   #+END:
+** defined-terms
+** local-REFILE                                                     :REFILE:
+:PROPERTIES:
+:ID:       df6757de-db23-4db0-b6db-4720b793dbe3
+:END:
+*** TODO [gema] add Fedora CoreOS Image/VMs
+:PROPERTIES:
+:ID: 318a8ad0-37b4-49dc-a8c7-b540819b2cb2
+:END:
+:LOGBOOK:
+- Refiled on [2020-07-18 Sat 13:17]
+:END:
+[2020-07-18 Sat 13:13]
+[[id:df6757de-db23-4db0-b6db-4720b793dbe3][local-REFILE]]
+- https://getfedora.org/en/coreos
+- this should be supportive of testing Openshift w/i GeMa as well
+
+*** TODO [gema] add todo list report generation
+- context ::
+  - [0/2] overview
+    - [x] remove todo list generator for the Makefile
+    - [ ] add todo list generator in invoke
+  - info/notes
+    - srcs
+      - [2020-06-21 Sun 16:22] targets removed from Makefile, kept for reference in case it helps create targets in invoke
+        #+begin_example
+help-todo-crit:
+	## $@ ##
+	@echo "\t__urgent:" && grep -rIn '#+XXX:' $(srcdir) $(sysconfdir)  $(opt_shell_postfix) | nl 
+help-todo-high:
+	## $@ ##
+	@echo "\t__needed:" && grep -rIn '#+FIXME:' $(srcdir) $(sysconfdir)  $(opt_shell_postfix) | nl
+help-todo: help-todo-crit help-todo-high
+	## $@ ##
+	@echo "\t__optimal:" && grep -rIn '#+TODO:' $(srcdir) $(sysconfdir)  $(opt_shell_postfix) | nl
+help-todo-low:
+	## $@ ##
+	@echo "\t__considerations:" && grep -rIin -e '#+Q:' -e '#+WARN:' -e '#+INFO:' -e '#+NB:' $(srcdir) $(sysconfdir)  $(opt_shell_postfix) | nl
+        #+end_example
+*** TODO [gema] feat: multi-module support
+:PROPERTIES:
+:ID: F164BEB0-1487-4C55-8513-A603176C5AE7
+:END:
+:LOGBOOK:
+- State "TODO"       from              [2020-07-11 Sat 16:45]
+- State "TODO"       from              [2019-05-26 Sun 15:42]
+CLOCK: [2019-05-26 Sun 15:41]--[2019-05-26 Sun 15:41] =>  0:00
+:END:
+[2019-05-26 Sun 15:41]
+[[file:~/.vault/docs/systems/gema-paradigm.org::*feat: multi-module support][feat: multi-module support]]
+ - context ::
+   - [0/12] overview
+     - initiative designation: *tentacles*
+     - [ ] establish a REPL-based Testing Env
+     - [ ] review of ~salt.utils.gitfs~
+     - [ ] review of ~salt.utils.file~
+     - [ ] review of ~salt.pillar.gitstack~
+     - [ ] review of ~salt.pillar.stack~
+     - [ ] review of ~salt.pillar.git~
+     - [ ] add gitfs-support to ~salt.pillar.stack~
+     - [ ] add gitfs-support to ~salt.pillar.file_tree~
+     - [ ] add pillarenv as virtual search-root to ~salt.pillar.stack~, rather than requiring files be relative to the ~pillarstack.cfg~ file
+     - [ ] author ~salt.utils.gema~ to speed and pythonize ~pillarstack.cfg~
+     - [ ] author ~salt.pillar.gema~ to add gitfs-support to stack
+     - [ ] author ~salt.pillar.gema~ to replace ~pillarstack.cfg~ with ~salt.utils.gema~
+   - info/notes
+     - srcs
+       #+NAME: F164BEB0-1487-4C55-8513-A603176C5AE7-srcs
+       #+CAPTION: reference list
+       | ! | title | url                                                                                                              | desc | rowid                                    |
+       |   | title | url                                                                                                              | desc | rowid                                    |
+       |---+-------+------------------------------------------------------------------------------------------------------------------+------+------------------------------------------|
+       | / |       |                                                                                                                  |      | <7>                                      |
+       | # |       | https://github.com/amendlik/gitstack-pillar/issues/7                                                             |      | <<84F3CC7D-C5A6-4A13-8226-3AC04D6D4092>> |
+       | # |       | https://docs.saltstack.com/en/latest/ref/pillar/all/salt.pillar.git_pillar.html                                  |      | <<2624959D-6770-4F8A-8046-2CBC4105C52C>> |
+       | # |       | https://docs.saltstack.com/en/latest/ref/pillar/all/salt.pillar.stack.html                                       |      | <<437FABB6-84E3-4412-9C71-8FD1FDC8B244>> |
+       | # |       | https://docs.saltstack.com/en/latest/ref/pillar/all/salt.pillar.git_pillar.html#how-multiple-remotes-are-handled |      | <<3E6D2B05-90C8-4159-AE1E-78C6F53D7448>> |
+       | # |       | https://docs.saltstack.com/en/latest/ref/clients/                                                                |      | <<26681795-8796-4405-9083-E0A2A34B9662>> |
+       | # |       | https://medium.com/@Drew_Stokes/saltstack-extending-the-pillar-494d41ee156d                                      |      | <<FFBD88CF-B93E-4E1D-95CB-46F9737B832E>> |
+       | # |       | https://docs.saltstack.com/en/latest/topics/development/modules/developing.html                                  |      | <<D4CB7AAA-EF87-4F79-90BA-7AF1B0DAE315>> |
+       | # |       | https://docs.saltstack.com/en/latest/ref/clients/#salt-s-opts-dictionary                                         |      | <<E03158D6-AD43-4E7D-A47A-7C90DE850C10>> |
+       | # |       | https://mypy.readthedocs.io/en/stable/cheat_sheet.html                                                           |      | <<96E37E47-33F9-4398-AD2E-9CF50C208D12>> |
+       | # |       | https://github.com/saltstack/salt/blob/develop/salt/utils/gitfs.py                                               |      | <<C2887DBE-9297-4AA0-938A-9FB72BA67F35>> |
+       | # |       | https://www.slideshare.net/JulianPacheco11/writing-custom-saltstack-eexecution-modules                           |      | <<622B60DD-AB5B-4603-9DAC-11F026891751>> |
+       | # |       | https://www.tutorialspoint.com/saltstack/saltstack_python_api.htm                                                |      | <<E7DEA5BC-6E27-4340-848E-5926DD344434>> |
+       | # |       | https://docs.saltstack.com/en/latest/ref/modules/index.html                                                      |      | <<40F4E33E-84F3-4603-9DB9-3D180725D568>> |
+       | # |       |                                                                                                                  |      | <<FCF545FB-E05E-41D5-84DE-345CDC4977E4>> |
+       #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+     - on Initial Understanding a/o Discovery
+       - the pillar_gitfs module uses the gitfs_utils to clone a remote repo to a cache dir then configure and query it using the local pillar_roots equivalent functions
+       - the gitstack ext_pillar is evaluated _after_ the pillar_gits ext_pillar and so re-uses the local pillar_roots config for itself then pulls in and invokes the pillarstack ext_pillar module using the pillar_roots provided from pillar_gits as pillarstack's local pillar_roots
+       - it should be possible to create a new ext_pillar module, which pulls in the pillar_gitfs module and subsequently pass the generated pillar_roots to the pillarstack module
+         - this would lay the groundwork for adding gitfs support to pillarstack as a PR
+       - Request: the pillar_gitfs should be refactored to seperate into worker functions called from the ext_pillar function, this would allow DRY re-use of the git-transparent pillar functionality in custom modules that want to similarly operate on git-backed pillar data
+     - on Establishing a REPL-based Testing Env
+       - to run Salt in REPL
+         #+BEGIN_SRC python :results output
+           #,assume, using salt-solo with CWD at root-dir of gema-ctl
+           import salt.client
+           c = salt.client.Caller(c_path='./etc/salt-solo/minion') # invokes salt.config.minion_config(c_path) if mopts isn't provide
+           c.cmd('test.ping')
+
+         #+END_SRC
+
+         #+RESULTS:
+         : this is a test
+
+     - on Review of ~salt.utils.gitfs~
+       - class ~salt.utils.GitPillar()~ has a methods ~checkout~ and ~link_mountpoint~, which may be important for creating a unified view of the environment
+     - on Review of ~salt.utils.file~
+     - on Review of ~salt.pillar.gitstack~
+     - on Review of ~salt.pillar.stack~
+     - on Review of ~salt.pillar.git~
+       - module imports
+         - ...???...
+       - module variables
+         - the ~__opts__~ variable
+           - is available, (seemingly implicitly), from the very beginning of the file.
+           - Q: could this be handled by the custom loader
+       - module functions
+         - ~__virtual__~ function
+           #+BEGIN_SRC python
+                 git_ext_pillars = [x for x in __opts__['ext_pillar'] if 'git' in x]
+                 if not git_ext_pillars:
+                     # No git external pillars were configured
+                     return False
+
+                 try:
+                     salt.utils.gitfs.GitPillar(__opts__, init_remotes=False)
+                     # Initialization of the GitPillar object did not fail, so we
+                     # know we have valid configuration syntax and that a valid
+                     # provider was detected.
+                     return __virtualname__
+                 except FileserverConfigError:
+                     return False
+
+           #+END_SRC
+           - get list of external pillar configs from ~__opts__['ext_pillar']~
+           - check for _membership_ of the module's ~__virtualname__~ string among the config keys, if absent, return ~False~
+           - if present, perform a test initialization of ~salt.utils.gitfs.GitPillar~, passing args ~(__opts__, init_remotes=False)~ in an except block
+           - if the test initialization succeeds, ~__virtual__~ will return ~__virtualname__~, else it'll raise a ~FaleserverConfigError~ and return ~False~
+         - ~ext_pillar~ function
+     - on Review of ~salt.utils.gitfs~
+       - 
+   - Questions
+   - log
+ - procedure :: (wip) howto run Salt interactively in the CLI REPL
+   - https://github.com/mirceaulinic/isalt
+
+*** TODO [gema] eval for adoption, Cumulus's Network Switch Vagrant Box
+:PROPERTIES:
+:ID: 25a703e3-42ee-4289-a2f0-1fa6a8b5e950
+:END:
+:LOGBOOK:
+- Refiled on [2020-07-11 Sat 16:41]
+CLOCK: [2020-07-11 Sat 16:21]--[2020-07-11 Sat 16:41] =>  0:20
+:END:
+[2020-07-11 Sat 16:21]
+[[id:693c60c1-f4aa-4e3b-9c14-c8399ace5e27][Introduction to GeMa Paradigm]]
+- context ::
+  - [0/0] overview
+  - info/notes
+    - srcs
+      #+NAME: 25a703e3-42ee-4289-a2f0-1fa6a8b5e950-srcs
+      #+CAPTION: reference list
+      | ! | title | url                                                                                                        | desc | rowid                                    |
+      |   | title | url                                                                                                        | desc | rowid                                    |
+      |---+-------+------------------------------------------------------------------------------------------------------------+------+------------------------------------------|
+      | / |       |                                                                                                            |      | <7>                                      |
+      | # |       | https://docs.cumulusnetworks.com/cumulus-vx/Development-Environments/Vagrant-and-Libvirt-with-KVM-or-QEMU/ |      | <<bbc25e18-6f2a-4ce5-8121-358c2dc18cf5>> |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+  - Questions
+  - log
+*** TODO [gema] eval adoption of Cisco Networking Vagrant boxes
+:PROPERTIES:
+:ID: 44e5dfa8-a006-4445-94bb-df394e733e6d
+:END:
+:LOGBOOK:
+- Refiled on [2020-07-12 Sun 10:36]
+CLOCK: [2020-07-11 Sat 12:55]--[2020-07-11 Sat 13:01] =>  0:06
+:END:
+[2020-07-11 Sat 12:55]
+[[id:d288bd56-daa6-47ec-b451-3264f10676bb][refile_gema-paradigm.org]]
+- context ::
+  - [0/0] overview
+  - info/notes
+    - srcs
+      #+NAME: 44e5dfa8-a006-4445-94bb-df394e733e6d-srcs
+      #+CAPTION: reference list
+      | ! | title                            | url                                                                             | desc                                                                                                                                                        | rowid                                    |
+      |   | title                            | url                                                                             | desc                                                                                                                                                        | rowid                                    |
+      |---+----------------------------------+---------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------|
+      | / |                                  |                                                                                 |                                                                                                                                                             | <7>                                      |
+      | # | vagrant_net_prog                 | https://developer.cisco.com/codeexchange/github/repo/hpreston/vagrant_net_prog/ | Sample Vagrant Files and things for Network Programmability Development. Collected vagrant boxes for Cisco's: Nexus 9000v, CSR 1000v, and XRv, among others | <<d810de37-9c27-47c2-be35-f1205f33462b>> |
+      | # | Vagrant Up for Network Engineers | https://developer.cisco.com/learning/modules/vagrant_up                         |                                                                                                                                                             | <<5b74c652-18de-4f97-aef5-7023067b49e6>> |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+     - excerpt from [[5b74c652-18de-4f97-aef5-7023067b49e6][Vagrant Up for Network Engineers]]
+       #+begin_center
+Vagrant, it’s not just for software developers. Learn how to “vagrant up” a network development environment. Useful for testing APIs, writing scripts, or exploring Ansible, Puppet, Salt, etc! This module will help you add some serious developer cred to your approach to NetDevOps and network development by building familiarity with the OpenSource tool Vagrant. It can be used to quickly “up” networking platforms on your laptop for fast development, code testing, API exploration and more! In this session we’ll cover the basics of using Vagrant, focusing on the networking elements of managing interfaces, protocols, and automating the initial provisioning with another OpenSource tool, Ansible. Leave with everything you need to get started today!
+       #+end_center
+  - Questions
+  - log
+*** TODO [gema] eval adoption of Podman to provide OCI container-support via vagrant  
+:PROPERTIES:
+:ID: 36e6f647-a694-40b5-b2e8-3b84bf86bf4d
+:END:
+:LOGBOOK:
+- Refiled on [2020-07-12 Sun 10:37]
+CLOCK: [2020-07-11 Sat 13:01]--[2020-07-11 Sat 13:02] =>  0:01
+:END:
+[2020-07-11 Sat 13:01]
+[[id:d288bd56-daa6-47ec-b451-3264f10676bb][refile_gema-paradigm.org]]
+- context ::
+  - [0/0] overview
+  - info/notes
+    - srcs
+      #+NAME: 36e6f647-a694-40b5-b2e8-3b84bf86bf4d-srcs
+      #+CAPTION: reference list
+      | ! | title | url                                                | desc | rowid                                    |
+      |   | title | url                                                | desc | rowid                                    |
+      |---+-------+----------------------------------------------------+------+------------------------------------------|
+      | / |       |                                                    |      | <7>                                      |
+      | # |       | https://www.vagrantup.com/docs/provisioning/podman |      | <<47f5096f-1dfd-4c02-bcad-0c3d078ca672>> |
+      #+TBLFM: $5='(if (and (string= @1$rowid "rowid") (string= $rowid "")) (concat "<<"(org-id-new) ">>") $rowid)
+  - Questions
+  - log
+** secrets                                                  :noexport:
+** sources
+** archived-items                                                   :ARCHIVE:
+** footnotes
+[fn:0] simple example of a footnote, delete at your leisure
